@@ -47,20 +47,33 @@ class Integrante(models.Model):
     alumno = models.OneToOneField(Alumno, on_delete=models.CASCADE,null=True, blank=True,related_name='integrante_alumno')
     proyecto = models.OneToOneField(Proyecto, on_delete=models.CASCADE,null=True, blank=True,related_name='integrante_proyecto')
 
-# class Movimiento(models.Model):
-#     movimiento = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
-#     fecha_mov = models.DateField()
-#     fin_mov = models.DateField()
-#     tipo_mov = models.CharField(max_length=200)
+class Movimiento(models.Model):
+    MOVIMIENTO_OPCIONES = (
+        ('proyecto_presentado', 'Proyecto Presentado'),
+        ('evaluacion_cstf', 'Proyecto en Evaluación por CSTF'),
+        ('evaluacion_tribunal', 'Proyecto en Evaluación por Tribunal'),
+        ('evaluacion_borrador', 'Borrador en Evaluación por el Tribunal'),
+        ('evaluacion_final', 'Defensa del Trabajo Final'),
+    )
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null=True, blank=True,related_name='movimiento')
+    fecha_mov = models.DateField(null=True, blank=True)
+    fin_mov = models.DateField(null=True, blank=True)
+    tipo_mov = models.CharField(max_length=200,null=True, blank=True, choices=MOVIMIENTO_OPCIONES)
 
-# class ArchivosTF(models.Model):
-#     archivos_tf = models.FileField()
-#     archivo_mov = models.OneToOneField(Movimiento, on_delete=models.CASCADE)
+class ArchivosTF(models.Model):
+    archivos_tf = models.FileField(null=True, blank=True)
+    archivo_mov = models.OneToOneField(Movimiento, on_delete=models.CASCADE,null=True, blank=True,related_name='archivo_mov')
 
-# class Dictamen(models.Model):
-#     resultado_dictamen = models.CharField(max_length=200)
-#     observacion = models.CharField(max_length=2000)
-#     dictamen_mov = models.OneToOneField(Movimiento, on_delete=models.CASCADE)
+class Dictamen(models.Model):
+    DICTAMEN_OPCIONES = (
+        ('aceptado', 'Aceptado'),
+        ('rechazado', 'Rechazado'),
+        ('observado', 'Observado'),
+    )
+    resultado_dictamen = models.CharField(max_length=200,null=True, blank=True, choices=DICTAMEN_OPCIONES)
+    observacion = models.CharField(max_length=2000,null=True, blank=True)
+    dictamen_mov = models.OneToOneField(Movimiento, on_delete=models.CASCADE,null=True, blank=True,related_name='dictamen_mov')
+    informe = models.FileField(null=True, blank=True)
 
 
 
