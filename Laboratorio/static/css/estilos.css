@@ -1,0 +1,105 @@
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  margin: 0;
+  margin-bottom: 70px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  margin-top: 20px; 
+  padding-top: 10px; 
+  background-color: #28a745;
+  border-color: #28a745;
+  text-align: center;
+}
+
+input{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 4px;
+  padding: 4px;
+}
+  
+div#logo img{
+  width: 1349px; 
+  height: 131px;
+}
+
+#logo{
+  background-color: #28a745;
+}
+
+.encabezado{
+  margin:10px;
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  ul.topnav li {float: left;}
+  
+  ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  ul.topnav li a:hover:not(.active) {background-color: #111;}
+  
+  ul.topnav li.right {float: right;}
+  
+  .menucentrado{
+    margin: 100px;
+    text-align:center;
+    vertical-align:middle;
+  }
+
+  .titulo{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+  
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+  }
+  
+  .tabla_nth_child{
+    margin-bottom: 20px;
+    vertical-align:middle;
+  }
+  
+  .tabla_nth_child tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  
+  .centrar{
+    text-align:center;
+    vertical-align:middle;
+  }
+
+  .margin{
+    margin: 100px;
+  }
