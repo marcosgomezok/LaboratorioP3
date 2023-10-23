@@ -7,5 +7,6 @@ from apps.trabajoFinalApp import views
 app_name = 'proyecto'
 urlpatterns = [
     path('estadisticas/', views.proyecto_lista, name='proyecto_lista'),
-    path('create/', views.proyecto_create, name='proyecto_create'),
+    path('crear/', views.proyecto_create, name='proyecto_create'),
+    path('registro/', views.proyecto_registro, name='proyecto_registro'),
 ]

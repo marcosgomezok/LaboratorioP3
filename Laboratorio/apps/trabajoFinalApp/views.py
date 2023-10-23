@@ -13,3 +13,8 @@ def proyecto_create(request):
          proyectos = Dictamen.objects.get(id=1)
          return render(request, "ptf\createPTF.html",
                   {'proyectos': proyectos})
+
+def proyecto_registro(request):
+         proyectos = Dictamen.objects.get(id=1)
+         return render(request, "registro/registro.html",
+                  {'proyectos': proyectos})
