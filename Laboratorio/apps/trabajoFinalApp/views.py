@@ -19,6 +19,11 @@ def proyecto_registro(request):
          return render(request, "registro/registro.html",
                   {'proyectos': proyectos})
 
+def proyecto_registro_cstf(request):
+         proyectos = Dictamen.objects.get(id=1)
+         return render(request, "registro/regCSTF.html",
+                  {'proyectos': proyectos})
+
 def proyecto_evaluacion_cstf(request):
          proyectos = Dictamen.objects.get(id=1)
          return render(request, "cstf/evaluacion.html",
