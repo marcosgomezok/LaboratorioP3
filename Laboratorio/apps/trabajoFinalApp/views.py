@@ -2,17 +2,32 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-# from apps.trabajoFinalApp.forms import PersonaForm, EstadoSaludForm
 from apps.trabajoFinalApp.models import Dictamen
+from apps.trabajoFinalApp.forms import ProyectoForm
 
 def proyecto_lista(request):
     proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
                   
+# def proyecto_create(request):
+#          proyectos = Dictamen.objects.get(id=1)
+#          return render(request, "alumno/createPTF.html",
+#                   {'proyectos': proyectos})
+
 def proyecto_create(request):
-         proyectos = Dictamen.objects.get(id=1)
-         return render(request, "alumno/createPTF.html",
-                  {'proyectos': proyectos})
+    if request.method == 'POST':
+
+        form_proyecto = ProyectoForm(request.POST, prefix='proyecto')
+
+        if form_proyecto.is_valid() and form_proyecto.is_valid():
+            proyecto_instance = form_proyecto.save()
+
+    else:
+        form_proyecto = ProyectoForm(prefix='persona')
+
+    return render(request, 'alumno/createPTF.html', {
+        'form_proyecto': form_proyecto,
+    })
 
 def proyecto_registro(request):
          proyectos = Dictamen.objects.get(id=1)
