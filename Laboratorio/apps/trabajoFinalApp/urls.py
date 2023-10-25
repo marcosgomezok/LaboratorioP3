@@ -1,8 +1,6 @@
 from django.urls import path
 
 from apps.trabajoFinalApp import views
-# from .views import proyecto_lista
-
 
 app_name = 'gestion'
 urlpatterns = [
@@ -13,6 +11,8 @@ urlpatterns = [
     path('administrador', views.administrador, name='administrador'),
     path('administrador/estadisticas', views.administrador_estadisticas, name='administrador_estadisticas'),
     path('administrador/estadisticas/listado/proyectos', views.proyecto_lista, name='proyecto_lista'),
+    path('administrador/alumno/alta', views.administrador_alumno_alta, name='administrador_alumno_alta'),
+    path('administrador/docente/alta', views.administrador_docente_alta, name='administrador_docente_alta'),
     path('alumno/proyecto/nuevo', views.proyecto_create, name='proyecto_create'),
     path('registro/', views.proyecto_registro, name='proyecto_registro'),
     path('administrador/cstf/nuevo', views.registro_cstf, name='registro_cstf'),

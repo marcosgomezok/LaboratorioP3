@@ -1,0 +1,33 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Administrador{% endblock %}
+{% block child %}
+<div class="container">
+    <div class="container-fluid">
+        <div class="centrar mb-3 mt-3 "><h3>Registrar Docente.</h3></div>
+        <form method="POST">
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Apellido</label>
+              <div class="col-sm-10">
+                {{form_docente.apellido}}
+              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Nombre</label>
+              <div class="col-sm-10">
+                {{form_docente.nombre}}
+              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Cuil</label>
+              <div class="col-sm-10">
+                {{form_docente.cuil}}
+              </div>
+          </div>
+          <div class="centrar margin">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Aceptar</button>
+          </div>                                       
+        </form>
+            </div>
+    </div>
+{% endblock child%}   
