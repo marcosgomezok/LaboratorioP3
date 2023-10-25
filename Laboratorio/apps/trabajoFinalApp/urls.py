@@ -13,6 +13,7 @@ urlpatterns = [
     path('administrador/estadisticas/listado/proyectos', views.proyecto_lista, name='proyecto_lista'),
     path('administrador/alumno/alta', views.administrador_alumno_alta, name='administrador_alumno_alta'),
     path('administrador/docente/alta', views.administrador_docente_alta, name='administrador_docente_alta'),
+    path('administrador/asesor/alta', views.administrador_asesor_alta, name='administrador_asesor_alta'),
     path('alumno/proyecto/nuevo', views.proyecto_create, name='proyecto_create'),
     path('registro/', views.proyecto_registro, name='proyecto_registro'),
     path('administrador/cstf/nuevo', views.registro_cstf, name='registro_cstf'),

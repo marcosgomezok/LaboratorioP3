@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from apps.trabajoFinalApp.models import Dictamen
-from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm
+from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm
 
 def proyecto_lista(request):
     proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
@@ -107,4 +107,20 @@ def administrador_docente_alta(request):
 
     return render(request, "administrador/personas/docenteAlta.html", {
         'form_docente': form_docente,
+    })
+
+def administrador_asesor_alta(request):
+    if request.method == 'POST':
+
+        form_asesor = AsesorForm(request.POST, prefix='form_asesor')
+
+        if form_asesor.is_valid():
+            form_asesor.save()
+            form_asesor = AsesorForm()
+
+    else:
+        form_asesor = AsesorForm( prefix='form_asesor')
+
+    return render(request, "administrador/personas/asesorAlta.html", {
+        'form_asesor': form_asesor,
     })

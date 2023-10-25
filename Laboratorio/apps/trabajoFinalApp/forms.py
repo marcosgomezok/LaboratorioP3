@@ -2,7 +2,7 @@ from django import forms
 from django.forms import DateInput
 
 from apps.trabajoFinalApp.models import Proyecto
-from apps.persona.models import Alumno,Docente
+from apps.persona.models import Alumno,Docente,Asesor
 
 
 class ProyectoForm(forms.ModelForm):
@@ -30,5 +30,14 @@ class DocenteForm(forms.ModelForm):
 
     class Meta:
         model = Docente
+        fields = ('nombre', 'apellido', 'cuil')
+
+class AsesorForm(forms.ModelForm):
+    nombre = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    apellido = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    cuil = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+
+    class Meta:
+        model = Asesor
         fields = ('nombre', 'apellido', 'cuil')
 
