@@ -19,11 +19,12 @@ def proyecto_create(request):
 
         form_proyecto = ProyectoForm(request.POST, prefix='proyecto')
 
-        if form_proyecto.is_valid() and form_proyecto.is_valid():
+        if form_proyecto.is_valid():
             proyecto_instance = form_proyecto.save()
+            form_proyecto = ProyectoForm()
 
     else:
-        form_proyecto = ProyectoForm(prefix='persona')
+        form_proyecto = ProyectoForm(prefix='proyecto')
 
     return render(request, 'alumno/createPTF.html', {
         'form_proyecto': form_proyecto,
