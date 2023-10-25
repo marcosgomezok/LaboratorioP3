@@ -6,15 +6,16 @@ class Persona(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
-    dni = models.CharField(max_length=8, unique=True)
 
 class Docente(Persona):
-    cuil = models.CharField(max_length=200,unique=True)
+    cuil = models.CharField(max_length=200,unique=True,null=True)
 
 class Alumno(Persona):
-    mu = models.CharField(max_length=200,unique=True)
+    dni = models.CharField(max_length=8, unique=True,null=True)
+    mu = models.CharField(max_length=200,unique=True,null=True)
     email = models.CharField(max_length=200)
 
 class Asesor(Persona):
+    cuil = models.CharField(max_length=200,unique=True,null=True)
     cv_asesor = models.FileField(null=True)
 
