@@ -18,4 +18,3 @@ class Alumno(Persona):
 class Asesor(Persona):
     cuil = models.CharField(max_length=200,unique=True,null=True)
     cv_asesor = models.FileField(null=True)
-

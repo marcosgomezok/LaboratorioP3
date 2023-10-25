@@ -1,15 +1,6 @@
-{% extends "base/base.html" %}
+{% extends "base/alumno.html" %}
 {% block titulo %}Crear PTF{% endblock %}
-{% block contenido %}
-<ul class="topnav">
-  <li><a class="active" href="{% url 'gestion:alumno' %}">Inicio</a></li>
-  <li><a href="{% url 'gestion:proyecto_create' %}">Nuevo</a></li>
-  <li><a href="{% url 'gestion:alumno' %}">Entrega</a></li>
-  <li><a href="{% url 'gestion:alumno' %}">Estado</a></li>
-  <li><a href="{% url 'gestion:alumno' %}">Baja</a></li>
-  <li class="right"><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-  <li class="right"><a href="{% url 'gestion:alumno' %}"><i class="fas fa-user"></i> Alumno: Gomez Marcos</a></li>
-</ul>
+{% block child%}
   <div class="container">
       <div class="container-fluid">
           <div class="centrar mb-3 mt-3 "><h3>Ingresar un PTF.</h3></div>
@@ -36,24 +27,6 @@
               <label class="col-sm-2 col-form-label">Archivos adjuntos</label>
                 <div class="col-sm-10">
                   <input type="file" class="form-control" id="adjuntos" name="adjuntos">
-                </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Certificado nalítico</label>
-                <div class="col-sm-10">
-                  <input type="file" class="form-control" id="analitico" name="analitico">
-                </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Nota de aceptación</label>
-                <div class="col-sm-10">
-                  <input type="file" class="form-control" id="nota" name="nota">
-                </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label">CV de asesor</label>
-                <div class="col-sm-10">
-                  <input type="file" class="form-control" id="cv" name="cv">
                 </div>
             </div>
             <div class="form-group row">
