@@ -3,8 +3,10 @@
 {% block contenido %}
 <ul class="topnav">
     <li><a class="active" href="./">Inicio</a></li>
-    <li class="right"><a href="{% url 'proyecto:proyecto_create' %}"><i class="fas fa-sign-in-alt"></i> Acceder</a></li>
-    <li class="right"><a href="{% url 'proyecto:proyecto_registro' %}"><i class="fas fa-user"></i> Registrarse</a></li>
+    <li><a href="{% url 'gestion:alumno' %}">Alumno</a></li>
+    <li><a href="{% url 'gestion:cstf' %}">Integrante de la CSTF</a></li>
+    <li><a href="{% url 'gestion:tribunal' %}">Integrante de Tribunal</a></li>
+    <li><a href="{% url 'gestion:administrador' %}">Administrador</a></li>
 </ul>
     <div class="menucentrado">
         <h1 class="titulo">Centro de gestión de trabajos finales</h1>
@@ -29,7 +31,7 @@
                             </div>
                             <div class="control-group">
                                 <div class="controls">
-                                    <a class="btn btn-success" href="{% url 'proyecto:proyecto_create' %}">Ingresar</a><br><br>
+                                    <a class="btn btn-success" href="#">Ingresar</a><br><br>
                                 </div>
                             </div>
                         </form>                       

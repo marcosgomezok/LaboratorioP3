@@ -28,3 +28,23 @@ def proyecto_evaluacion_cstf(request):
          proyectos = Dictamen.objects.get(id=1)
          return render(request, "cstf/evaluacion.html",
                   {'proyectos': proyectos})
+
+def alumno(request):
+         alumnos = Dictamen.objects.get(id=1)
+         return render(request, "alumno/home.html",
+                  {'alumnos': alumnos})
+
+def cstf(request):
+         cstf = Dictamen.objects.get(id=1)
+         return render(request, "cstf/home.html",
+                  {'cstf': cstf})
+
+def tribunal(request):
+         tribunal = Dictamen.objects.get(id=1)
+         return render(request, "tribunal/home.html",
+                  {'tribunal': tribunal})
+
+def administrador(request):
+         administrador = Dictamen.objects.get(id=1)
+         return render(request, "administrador/home.html",
+                  {'administrador': administrador})
