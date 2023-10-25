@@ -1,12 +1,6 @@
-{% extends "base/base.html" %}
+{% extends "base/cstf.html" %}
 {% block titulo %}CSTF{% endblock %}
-{% block contenido %}
-    <ul class="topnav">
-        <li><a class="active" href="#">Inicio</a></li>
-        <li><a href="{% url 'gestion:cstf_evaluacion' %}">Evaluación</a></li>
-        <a class="right" href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
-        <a class="right" href="{% url 'gestion:cstf' %}"><i class="fas fa-user"></i> Docente: Rodriguez Pablo</a>
-    </ul>
-    <div class="container">
-    </div>
-{% endblock %}   
+{% block child %}
+<div class="container">
+</div>
+{% endblock%}   

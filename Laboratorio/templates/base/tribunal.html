@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% block titulo %}Tribunal{% endblock %}
+{% block contenido %}
+<ul class="topnav">
+    <li><a class="active" href="#">Inicio</a></li>
+    <li><a href="{% url 'gestion:tribunal' %}">Evaluación PTF</a></li>
+    <li><a href="{% url 'gestion:tribunal' %}">Evaluación BITF</a></li>
+    <a class="right" href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <a class="right" href="{% url 'gestion:tribunal' %}"><i class="fas fa-user"></i> Docente: Rodriguez Pablo</a>
+</ul>
+{% block child %}
+{% endblock child %}   
+{% endblock contenido%}   
