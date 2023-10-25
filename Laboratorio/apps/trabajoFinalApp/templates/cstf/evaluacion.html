@@ -2,11 +2,10 @@
 {% block titulo %}Evaluacion CSTF{% endblock %}
 {% block contenido %}
     <ul class="topnav">
-        <li><a class="active" href="/">Inicio</a></li>
-        <li><a href="{% url 'proyecto:proyecto_lista' %}">Estadisticas</a></li>
-        <li><a href="{% url 'proyecto:proyecto_evaluacion_cstf' %}">Evaluacion CSTF</a></li>
-        <li class="right"><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-        <li class="right"><a href="/"><i class="fas fa-user-tie"></i> Administrador: Luna Lucas</a></li>
+        <li><a class="active" href="#">Inicio</a></li>
+        <li><a href="{% url 'gestion:cstf_evaluacion' %}">Evaluación</a></li>
+        <a class="right" href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        <a class="right" href="{% url 'gestion:cstf' %}"><i class="fas fa-user"></i> Docente: Rodriguez Pablo</a>
     </ul>
     <div class="container">
             <!-- Modal -->

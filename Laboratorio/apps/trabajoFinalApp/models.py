@@ -11,7 +11,6 @@ class Miembro_Cstf(models.Model):
     docente = models.OneToOneField(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='docente')
 
 class Tribunal(models.Model):
-    
     disposicion = models.DateField(null=True, blank=True)
     nro_disposicion = models.CharField(null=True, blank=True)
     archivo_tribunal = models.FileField(null=True)
@@ -20,6 +19,10 @@ class Tribunal(models.Model):
 class Miembro_Titular(models.Model):
     tribunal_mt = models.ForeignKey(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_mt')
     vocal_titular = models.OneToOneField(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='vocal_titular')
+
+class Miembro_Suplente(models.Model):
+    tribunal_ms = models.ForeignKey(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_ms')
+    vocal_suplente = models.OneToOneField(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='vocal_suplente')
 
 class Proyecto(models.Model):
     titulo = models.CharField(max_length=200)
@@ -31,10 +34,6 @@ class Proyecto(models.Model):
     asesor = models.OneToOneField(Asesor, on_delete=models.SET_NULL,null=True, blank=True,related_name='asesor')
     cstf_proyecto = models.OneToOneField(Cstf, on_delete=models.CASCADE,null=True, blank=True,related_name='cstf_proyecto')
     tribunal_proyecto = models.OneToOneField(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_proyecto')
-
-class Miembro_Suplente(models.Model):
-    tribunal_ms = models.ForeignKey(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_ms')
-    vocal_suplente = models.OneToOneField(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='vocal_suplente')
 
 class RegistroDirector(models.Model):
     alta_proyecto = models.DateField(null=True, blank=True)

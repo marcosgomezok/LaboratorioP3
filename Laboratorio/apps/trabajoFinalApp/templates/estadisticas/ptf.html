@@ -1,13 +1,113 @@
 {% extends "base/base.html" %}
-{% block titulo %}Crear PTF{% endblock %}
+{% block titulo %}Administrador{% endblock %}
 {% block contenido %}
-<ul class="topnav">
-    <li><a class="active" href="/">Inicio</a></li>
-    <li><a href="{% url 'proyecto:proyecto_lista' %}">Estadisticas</a></li>
-    <li><a href="{% url 'proyecto:proyecto_evaluacion_cstf' %}">Evaluacion CSTF</a></li>
-    <li class="right"><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-    <li class="right"><a href="/"><i class="fas fa-user-tie"></i> Administrador: Luna Lucas</a></li>
-</ul>
+<div class="topnav" id="myTopnav">
+    <a class="active" href="{% url 'gestion:administrador' %}">Inicio</a>
+    <div class="dropdown">
+        <button class="dropbtn">Proyectos
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Alumnos
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Docentes
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Asesores
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Tribunales
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">CSTFs
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'gestion:registro_cstf' %}">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Movimientos
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Dictamenes
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="dropbtn">Archivos
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Alta</a>
+          <a href="#">Baja</a>
+          <a href="#">Modificacion</a>
+          <a href="#">Listado</a>
+        </div>
+      </div>
+      <a href="{% url 'gestion:administrador_estadisticas' %}">Estadisticas</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+
+      <a class="right" href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+      <a class="right" href="{% url 'gestion:administrador' %}"><i class="fas fa-user"></i> Administrador: Rodriguez Pablo</a>
+</div>  
 <div class="container">
 
     <div class="container-fluid">
@@ -57,4 +157,4 @@
          
     </div>
 </div>
-{% endblock %}
+{% endblock %}   

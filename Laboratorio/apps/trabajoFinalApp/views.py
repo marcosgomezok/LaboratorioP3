@@ -19,9 +19,9 @@ def proyecto_registro(request):
          return render(request, "registro/registro.html",
                   {'proyectos': proyectos})
 
-def proyecto_registro_cstf(request):
+def registro_cstf(request):
          proyectos = Dictamen.objects.get(id=1)
-         return render(request, "registro/regCSTF.html",
+         return render(request, "cstf/regCSTF.html",
                   {'proyectos': proyectos})
 
 def proyecto_evaluacion_cstf(request):
@@ -38,6 +38,10 @@ def cstf(request):
          cstf = Dictamen.objects.get(id=1)
          return render(request, "cstf/home.html",
                   {'cstf': cstf})
+def cstf_evaluacion(request):
+         cstf = Dictamen.objects.get(id=1)
+         return render(request, "cstf/evaluacion.html",
+                  {'cstf': cstf})
 
 def tribunal(request):
          tribunal = Dictamen.objects.get(id=1)
@@ -47,4 +51,9 @@ def tribunal(request):
 def administrador(request):
          administrador = Dictamen.objects.get(id=1)
          return render(request, "administrador/home.html",
+                  {'administrador': administrador})
+
+def administrador_estadisticas(request):
+         administrador = Dictamen.objects.get(id=1)
+         return render(request, "estadisticas/estadisticas.html",
                   {'administrador': administrador})
