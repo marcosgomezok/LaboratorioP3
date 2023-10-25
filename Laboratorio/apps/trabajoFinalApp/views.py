@@ -7,11 +7,11 @@ from apps.trabajoFinalApp.models import Dictamen
 
 def proyecto_lista(request):
     proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
-    return render(request,'estadisticas/ptf.html',{'proyectos': proyectos})
+    return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
                   
 def proyecto_create(request):
          proyectos = Dictamen.objects.get(id=1)
-         return render(request, "ptf/createPTF.html",
+         return render(request, "alumno/createPTF.html",
                   {'proyectos': proyectos})
 
 def proyecto_registro(request):
@@ -21,7 +21,7 @@ def proyecto_registro(request):
 
 def registro_cstf(request):
          proyectos = Dictamen.objects.get(id=1)
-         return render(request, "cstf/regCSTF.html",
+         return render(request, "administrador/CSTFs/regCSTF.html",
                   {'proyectos': proyectos})
 
 def proyecto_evaluacion_cstf(request):
@@ -55,5 +55,5 @@ def administrador(request):
 
 def administrador_estadisticas(request):
          administrador = Dictamen.objects.get(id=1)
-         return render(request, "estadisticas/estadisticas.html",
+         return render(request, "administrador/estadisticas/estadisticas.html",
                   {'administrador': administrador})
