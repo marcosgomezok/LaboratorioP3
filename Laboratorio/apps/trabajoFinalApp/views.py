@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Alumno
+from apps.trabajoFinalApp.models import Dictamen,Integrante
+from apps.persona.models import Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm
 
 def proyecto_lista(request):
@@ -20,9 +21,11 @@ def proyecto_create(request):
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
         try:
             alumno = Alumno.objects.get(mu=request.POST.get("form_integrante-mu"))
-            print(alumno)
             if form_proyecto.is_valid():
                     proyecto_instance = form_proyecto.save()
+                    integrante = Integrante()
+                    integrante.alumno = alumno
+                    integrante.save()
                     messages.success(request, 'Se ha agregado exitosamente el proyecto')
                     return redirect(reverse('gestion:proyecto_create'))
             else:

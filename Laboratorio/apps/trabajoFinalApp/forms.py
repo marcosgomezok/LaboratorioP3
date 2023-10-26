@@ -8,9 +8,13 @@ from apps.persona.models import Alumno,Docente,Asesor
 class ProyectoForm(forms.ModelForm):
     titulo = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
     descripcion = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    # presentacion_ptf = forms.DateField(DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     class Meta:
         model = Proyecto
-        fields = ('titulo', 'descripcion')
+        fields = ('titulo', 'descripcion','presentacion_ptf')
+        widgets = {
+            'presentacion_ptf': DateInput(format='%Y-%m-%d', attrs={'type': 'date','required': 'true'}),
+        }
 
 class AlumnoForm(forms.ModelForm):
     nombre = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
