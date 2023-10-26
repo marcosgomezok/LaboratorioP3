@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen
+from apps.trabajoFinalApp.models import Dictamen,Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm
 
 def proyecto_lista(request):
@@ -17,16 +17,24 @@ def proyecto_lista(request):
 def proyecto_create(request):
     if request.method == 'POST':
 
-        form_proyecto = ProyectoForm(request.POST, prefix='proyecto')
-        form_integrante = AlumnoForm(request.POST, prefix='integrante')
+        form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
+        try:
+            alumno = Alumno.objects.get(mu=request.POST.get("form_integrante-mu"))
+            print(alumno)
+            if form_proyecto.is_valid():
+                    proyecto_instance = form_proyecto.save()
+                    messages.success(request, 'Se ha agregado exitosamente el proyecto')
+                    return redirect(reverse('gestion:proyecto_create'))
+            else:
+                    form_proyecto = ProyectoForm(prefix='form_proyecto')
+                    form_integrante = AlumnoForm(prefix='form_integrante')
 
-        if form_proyecto.is_valid():
-            proyecto_instance = form_proyecto.save()
-            form_proyecto = ProyectoForm()
-
+        except Alumno.DoesNotExist:
+            form_integrante = AlumnoForm(prefix='form_integrante')
+            messages.error(request, 'Error, Matricula Incorrecta')  
     else:
-        form_proyecto = ProyectoForm(prefix='proyecto')
-        form_integrante = AlumnoForm(prefix='integrante')
+        form_proyecto = ProyectoForm(prefix='form_proyecto')
+        form_integrante = AlumnoForm(prefix='form_integrante')
 
     return render(request, 'alumno/createPTF.html', {
         'form_proyecto': form_proyecto,
