@@ -25,6 +25,7 @@ def proyecto_create(request):
                     proyecto_instance = form_proyecto.save()
                     integrante = Integrante()
                     integrante.alumno = alumno
+                    integrante.proyecto = proyecto_instance
                     integrante.save()
                     messages.success(request, 'Se ha agregado exitosamente el proyecto')
                     return redirect(reverse('gestion:proyecto_create'))
