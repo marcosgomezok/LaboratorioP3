@@ -77,6 +77,15 @@ def proyecto_entrega(request):
                 dictamen.dictamen_mov=movimiento
                 dictamen.save()
             else:
+                # if(dictamen.resultado_dictamen == 'aceptado'):
+                dictamen = Dictamen()
+                movimiento = Movimiento()
+                movimiento.tipo_mov = 'evaluacion_cstf'
+                movimiento.movimiento_proyecto=proyecto
+                movimiento.save()
+                dictamen.dictamen_mov=movimiento
+                dictamen.save()
+                     
                 return render(request, 'alumno/entrega.html', {
                      'proyecto': proyecto,
                      'dictamen':dictamen,

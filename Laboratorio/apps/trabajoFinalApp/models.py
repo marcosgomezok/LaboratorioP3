@@ -73,7 +73,7 @@ class Dictamen(models.Model):
     )
     resultado_dictamen = models.CharField(max_length=200,null=True, blank=True, choices=DICTAMEN_OPCIONES)
     observacion = models.CharField(max_length=2000,null=True, blank=True)
-    dictamen_mov = models.OneToOneField(Movimiento, on_delete=models.CASCADE,null=True, blank=True,related_name='dictamen_mov')
+    dictamen_mov = models.ForeignKey(Movimiento, on_delete=models.CASCADE,null=True, blank=True,related_name='dictamen_mov')
     informe = models.FileField(null=True, blank=True)
 
 #importaciones:
