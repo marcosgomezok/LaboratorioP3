@@ -4,7 +4,8 @@ from django.urls import reverse
 
 from apps.trabajoFinalApp.models import Dictamen,Integrante
 from apps.persona.models import Alumno
-from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm
+from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
+from django.contrib.auth.models import Group
 
 def proyecto_lista(request):
     proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
@@ -93,16 +94,27 @@ def administrador_alumno_alta(request):
     if request.method == 'POST':
 
         form_alumno = AlumnoForm(request.POST, prefix='form_alumno')
+        form_user = UserForm(request.POST, prefix='form_user')
 
         if form_alumno.is_valid():
-            form_alumno.save()
+            user = form_user.save(commit=False)
+            alumno = form_alumno.save(commit=False)
+            user.email = alumno.email
+            user.save()
+            group = Group.objects.get(name='Alumno')
+            user.groups.add(group)
+            alumno.user = user
+            alumno.save()
             form_alumno = AlumnoForm()
+            form_user = UserForm()
 
     else:
         form_alumno = AlumnoForm( prefix='form_alumno')
+        form_user = UserForm( prefix='form_user')
 
     return render(request, "administrador/personas/alumnoAlta.html", {
         'form_alumno': form_alumno,
+        'form_user': form_user,
     })
 
 def administrador_docente_alta(request):

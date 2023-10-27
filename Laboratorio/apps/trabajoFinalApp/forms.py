@@ -3,6 +3,7 @@ from django.forms import DateInput
 
 from apps.trabajoFinalApp.models import Proyecto
 from apps.persona.models import Alumno,Docente,Asesor
+from django.contrib.auth.models import User
 
 
 class ProyectoForm(forms.ModelForm):
@@ -44,4 +45,12 @@ class AsesorForm(forms.ModelForm):
     class Meta:
         model = Asesor
         fields = ('nombre', 'apellido', 'cuil')
+
+class UserForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    password = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control","type": "password"}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
 
