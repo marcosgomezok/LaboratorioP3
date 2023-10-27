@@ -8,6 +8,7 @@ from apps.persona.models import Docente,Alumno,Asesor,Persona
 from django.contrib.auth.models import User
 
 def index(request):
+    print(request.user.is_authenticated)
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("usuarios:login"))
     try:

@@ -1,0 +1,43 @@
+{% extends "base/alumno.html" %}
+{% block titulo %}Alumno{% endblock %}
+{% block child %}
+<div class="container">
+    <div class="container-fluid">
+        <div class="centrar mb-3 mt-3 "><h3>Tu Proyecto de Trabajo Final.</h3></div>
+        <form method="POST">
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Título</label>
+              <div class="col-sm-10">
+                <label class="col-form-label">{{proyecto.titulo}}</label>
+              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Descripción</label>
+              <div class="col-sm-10"> 
+                <label class="col-form-label">{{proyecto.descripcion}}</label>
+              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Fecha inicio</label>
+              <div class="col-sm-10">
+                <label class="col-form-label">{{proyecto.presentacion_ptf}}</label>
+              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Archivos adjuntos</label>
+              <div class="col-sm-10">
+                <div class="col-form-label">
+
+                    <a  href="#" download="archivo.html">Descargar</a>
+                </div>
+              </div>
+          </div>  
+          <div class="centrar margin">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Abandonar Proyecto</button>
+          </div>                                       
+        </form>                                   
+
+            </div>
+    </div>
+{% endblock %}   

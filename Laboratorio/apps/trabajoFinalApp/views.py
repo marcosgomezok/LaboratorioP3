@@ -7,18 +7,24 @@ from apps.persona.models import Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
+from datetime import datetime
+from django.utils import timezone
 
 def proyecto_lista(request):
     proyectos = User.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
 def proyecto_integrante(request):
+    #obtengo el proyecto asignado al usuario logeado
+    alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    if integrante is not None:
+        proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
+    else:
+        return redirect(reverse('gestion:proyecto_create'))
+         
     if request.method == 'POST':
         try:
-            #obtengo el proyecto asignado al usuario logeado
-            alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
-            integrante = Integrante.objects.get(alumno_id=alumno.id)
-            proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
 
             #asigno el proyecto a un nuevo registro de integrantes
             integrante = Integrante()
@@ -26,7 +32,8 @@ def proyecto_integrante(request):
 
             #asigno el alumno a un nuevo registro de integrantes
             alumno = Alumno.objects.select_related('user').get(mu=request.POST.get("integrante-mu"))
-            if(Integrante.objects.filter(alumno_id=alumno.id).first()== None):
+            print(alumno.mu)
+            if(Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()== None):
                  integrante.alumno = alumno
                  integrante.save()
             else:
@@ -35,6 +42,23 @@ def proyecto_integrante(request):
             messages.error(request, 'Error, Matricula Incorrecta')
             return render(request, 'alumno/integrante.html')
     return render(request, 'alumno/integrante.html')
+
+def proyecto_baja(request):
+
+    alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    if integrante is not None:
+        proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
+        if request.method == 'POST':
+            integrante.baja_proyecto=datetime.now()
+            integrante.save()
+            return render(request, 'alumno/home.html')
+        return render(request, 'alumno/baja.html', {
+                     'proyecto': proyecto,
+                     })
+    else:
+         return redirect(reverse('gestion:proyecto_create'))
+
 
 def proyecto_create(request):
     if request.method == 'POST':
@@ -45,6 +69,7 @@ def proyecto_create(request):
             if form_proyecto.is_valid():
                     proyecto_instance = form_proyecto.save()
                     integrante = Integrante()
+                    integrante.alta_proyecto =datetime.now()
                     integrante.alumno = alumno
                     integrante.proyecto = proyecto_instance
                     integrante.save()
@@ -62,7 +87,7 @@ def proyecto_create(request):
         form_integrante = AlumnoForm(prefix='form_integrante')
     try:
         alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
-        integrante = Integrante.objects.get(alumno_id=alumno.id)
+        integrante = Integrante.objects.get(alumno_id=alumno.id,baja_proyecto=None)
         proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
         return render(request, 'alumno/estado.html', {
             'proyecto': proyecto,
@@ -72,12 +97,7 @@ def proyecto_create(request):
                 'form_proyecto': form_proyecto,
                 'form_integrante': form_integrante,
             })
-    #     else:
-    #         return render(request, 'alumno/home.html', {
-    #             'form_proyecto': form_proyecto,
-    #             'form_integrante': form_integrante,
-    #         })
-    # except Alumno.DoesNotExist:      
+   
 
 def proyecto_registro(request):
          proyectos = User.objects.get(id=1)

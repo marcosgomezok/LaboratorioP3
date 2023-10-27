@@ -45,7 +45,7 @@ class Integrante(models.Model):
     alta_proyecto = models.DateField(null=True, blank=True)
     baja_proyecto = models.DateField(null=True, blank=True)
     analitico = models.FileField(null=True, blank=True)
-    alumno = models.OneToOneField(Alumno, on_delete=models.CASCADE,null=True, blank=True,related_name='integrante_alumno')
+    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE,null=True, blank=True,related_name='integrante_alumno')
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null=True, blank=True,related_name='integrante_proyecto')
 
 class Movimiento(models.Model):
