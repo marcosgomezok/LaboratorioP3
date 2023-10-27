@@ -3,10 +3,9 @@
 {% block child%}
   <div class="container">
       <div class="container-fluid">
-          <div class="centrar mb-3 mt-3 "><h3>Ingresar un PTF.</h3></div>
+          <div class="centrar mb-3 mt-3 "><h3>Debes cargar tu Proyecto de Trabajo Final primero.</h3></div>
           {% if messages %}
               {% for message in messages %}
-                  {% if message.tags == 'success' %}  <div class="message" role="status">{{ message }}</div>{% endif %}
                   {% if message.tags == 'error' %}  <div class="errors" role="alert">{{ message }}</div>{% endif %}
               {% endfor %}
           {% endif %}
@@ -34,13 +33,7 @@
                 <div class="col-sm-10">
                   <input type="file" class="form-control" id="adjuntos" >
                 </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Alumno (MU)</label>
-                <div class="col-sm-10">
-                  {{form_integrante.mu}}
-                </div>
-                </div>         
+            </div> 
                 <div class="centrar margin">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-success">Aceptar</button>

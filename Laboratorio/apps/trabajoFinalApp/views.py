@@ -2,27 +2,22 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Integrante
+from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto
 from apps.persona.models import Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 
 def proyecto_lista(request):
-    proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
+    proyectos = User.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
-                  
-# def proyecto_create(request):
-#          proyectos = Dictamen.objects.get(id=1)
-#          return render(request, "alumno/createPTF.html",
-#                   {'proyectos': proyectos})
 
 def proyecto_create(request):
     if request.method == 'POST':
 
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
         try:
-            alumno = Alumno.objects.get(mu=request.POST.get("form_integrante-mu"))
+            alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
             if form_proyecto.is_valid():
                     proyecto_instance = form_proyecto.save()
                     integrante = Integrante()
@@ -41,53 +36,66 @@ def proyecto_create(request):
     else:
         form_proyecto = ProyectoForm(prefix='form_proyecto')
         form_integrante = AlumnoForm(prefix='form_integrante')
-
-    return render(request, 'alumno/createPTF.html', {
-        'form_proyecto': form_proyecto,
-        'form_integrante': form_integrante,
-    })
+    try:
+        alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
+        integrante = Integrante.objects.get(alumno_id=alumno.id)
+        proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
+        return render(request, 'alumno/estado.html', {
+            'proyecto': proyecto,
+             })
+    except Integrante.DoesNotExist:
+        return render(request, 'alumno/createPTF.html', {
+                'form_proyecto': form_proyecto,
+                'form_integrante': form_integrante,
+            })
+    #     else:
+    #         return render(request, 'alumno/home.html', {
+    #             'form_proyecto': form_proyecto,
+    #             'form_integrante': form_integrante,
+    #         })
+    # except Alumno.DoesNotExist:      
 
 def proyecto_registro(request):
-         proyectos = Dictamen.objects.get(id=1)
+         proyectos = User.objects.get(id=1)
          return render(request, "registro/registro.html",
                   {'proyectos': proyectos})
 
 def registro_cstf(request):
-         proyectos = Dictamen.objects.get(id=1)
+         proyectos = User.objects.get(id=1)
          return render(request, "administrador/CSTFs/regCSTF.html",
                   {'proyectos': proyectos})
 
 def proyecto_evaluacion_cstf(request):
-         proyectos = Dictamen.objects.get(id=1)
+         proyectos = User.objects.get(id=1)
          return render(request, "cstf/evaluacion.html",
                   {'proyectos': proyectos})
 
 def alumno(request):
-         alumnos = Dictamen.objects.get(id=1)
+         alumnos = User.objects.get(id=1)
          return render(request, "alumno/home.html",
                   {'alumnos': alumnos})
 
 def cstf(request):
-         cstf = Dictamen.objects.get(id=1)
+         cstf = User.objects.get(id=1)
          return render(request, "cstf/home.html",
                   {'cstf': cstf})
 def cstf_evaluacion(request):
-         cstf = Dictamen.objects.get(id=1)
+         cstf = User.objects.get(id=1)
          return render(request, "cstf/evaluacion.html",
                   {'cstf': cstf})
 
 def tribunal(request):
-         tribunal = Dictamen.objects.get(id=1)
+         tribunal = User.objects.get(id=1)
          return render(request, "tribunal/home.html",
                   {'tribunal': tribunal})
 
 def administrador(request):
-         administrador = Dictamen.objects.get(id=1)
+         administrador = User.objects.get(id=1)
          return render(request, "administrador/home.html",
                   {'administrador': administrador})
 
 def administrador_estadisticas(request):
-         administrador = Dictamen.objects.get(id=1)
+         administrador = User.objects.get(id=1)
          return render(request, "administrador/estadisticas/estadisticas.html",
                   {'administrador': administrador})
 
