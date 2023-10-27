@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto
+from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento
 from apps.persona.models import Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
@@ -55,6 +55,35 @@ def proyecto_baja(request):
             return render(request, 'alumno/home.html')
         return render(request, 'alumno/baja.html', {
                      'proyecto': proyecto,
+                     })
+    else:
+         return redirect(reverse('gestion:proyecto_create'))
+    
+def proyecto_entrega(request):
+
+    alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    if integrante is not None:
+        proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
+        dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).first()
+        
+        if request.method == 'POST':
+            if dictamen is None:
+                dictamen = Dictamen()
+                movimiento = Movimiento()
+                movimiento.tipo_mov = 'proyecto_presentado'
+                movimiento.movimiento_proyecto=proyecto
+                movimiento.save()
+                dictamen.dictamen_mov=movimiento
+                dictamen.save()
+            else:
+                return render(request, 'alumno/entrega.html', {
+                     'proyecto': proyecto,
+                     'dictamen':dictamen,
+                     })
+        return render(request, 'alumno/entrega.html', {
+                     'proyecto': proyecto,
+                     'dictamen':dictamen,
                      })
     else:
          return redirect(reverse('gestion:proyecto_create'))

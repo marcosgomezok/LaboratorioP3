@@ -24,17 +24,37 @@
               </div>
           </div>
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Adjuntos</label>
+              <label class="col-sm-1 col-form-label">Adjuntos</label>
               <div class="col-sm-11">
-                <div class="col-form-label">
-
-                    <a  href="#" download="archivo.html">Descargar</a>
+                  <div class="col-form-label">
+                      
+                      <a  href="#" download="archivo.html">Descargar</a>
+                    </div>
                 </div>
-              </div>
-          </div>  
+            </div>  
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Movimiento:</label>
+                <div class="col-sm-11">
+                    {% if dictamen.dictamen_mov.tipo_mov is null or blank %}
+                    <label class="col-form-label">Inicio</label>
+                  {% else %}
+                    <label class="col-form-label">{{dictamen.dictamen_mov.get_tipo_mov_display}}</label>
+                  {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Estado:</label>
+                <div class="col-sm-11">
+                    {% if dictamen.resultado_dictamen is null or blank %}
+                    <label class="col-form-label">En espera</label>
+                  {% else %}
+                    <label class="col-form-label">{{dictamen.resultado_dictamen}}</label>
+                  {% endif %}
+                </div>
+            </div>
           <div class="centrar margin">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success">Abandonar Proyecto</button>
+            <button type="submit" class="btn btn-success">Enviar a Evaluación</button>
           </div>                                       
         </form>                                   
 

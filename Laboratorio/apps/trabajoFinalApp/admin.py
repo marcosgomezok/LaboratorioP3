@@ -28,3 +28,10 @@ class ProyectoAdmin(admin.ModelAdmin):
 @admin.register(Integrante)
 class IntegranteAdmin(admin.ModelAdmin):
     list_display = ("id","proyecto_id")
+
+@admin.register(Movimiento)
+class MovimientoAdmin(admin.ModelAdmin):
+    list_display = ("id","tipo_mov")
+@admin.register(Dictamen)
+class DictamenAdmin(admin.ModelAdmin):
+    list_display = ("id","resultado_dictamen")
