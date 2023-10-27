@@ -78,6 +78,7 @@ class Dictamen(models.Model):
 
 #importaciones:
 #from apps.trabajoFinalApp.models import Proyecto,Cstf,Miembro_Cstf,Tribunal,Miembro_Titular,Miembro_Suplente,RegistroDirector,Integrante,Movimiento,ArchivosTF,Dictamen
+#from apps.persona.models import Alumno
 
 ##Consuta de un PTF para saber su estado
 #proyecto= Proyecto.objects.get(id=1)
@@ -93,6 +94,7 @@ class Dictamen(models.Model):
 #ptfs_asignados = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto__tribunal_proyecto').filter(resultado_dictamen="aceptado",dictamen_mov__fecha_mov__range=['2020-01-01', '2027-12-31']).values()
 #print(ptfs_asignados)
 
+#alumno = Alumno.objects.select_related('user')
 
 
 

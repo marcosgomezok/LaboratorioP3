@@ -4,13 +4,25 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
+from apps.persona.models import Docente,Alumno,Asesor
 
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("usuarios:login"))
     #return redirect('gestion/alumno', permanent=False)
     #return render(request, "usuarios/usuario.html")
-    return HttpResponseRedirect(reverse('gestion:alumno'))
+    try:
+        Alumno.objects.select_related('user').get(user_id=request.user.id)
+        return HttpResponseRedirect(reverse('gestion:alumno'))
+    except Alumno.DoesNotExist:
+        return None
+    # try:
+    #     Alumno.objects.select_related('user').get(user_id=request.user.id)
+    #     return HttpResponseRedirect(reverse('gestion:alumno'))
+    # except Alumno.DoesNotExist:
+    #     return None
+    # alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
+    # print(alumno)
 
 def login_view(request):
     if request.method == "POST":
