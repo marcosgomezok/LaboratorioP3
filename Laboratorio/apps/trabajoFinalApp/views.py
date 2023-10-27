@@ -6,6 +6,7 @@ from apps.trabajoFinalApp.models import Dictamen,Integrante
 from apps.persona.models import Alumno
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 
 def proyecto_lista(request):
     proyectos = Dictamen.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
@@ -97,9 +98,9 @@ def administrador_alumno_alta(request):
         form_user = UserForm(request.POST, prefix='form_user')
 
         if form_alumno.is_valid():
-            user = form_user.save(commit=False)
+            temp_user = form_user.save(commit=False)
             alumno = form_alumno.save(commit=False)
-            user.email = alumno.email
+            user = User.objects.create_user(temp_user.username, alumno.email, temp_user.password)
             user.save()
             group = Group.objects.get(name='Alumno')
             user.groups.add(group)

@@ -1,0 +1,38 @@
+{% extends "base/home.html" %}
+{% block titulo %}Inicio Sesión{% endblock %}
+{% block child %}
+                <div class="menucentrado">
+                    <h1 class="titulo">Centro de gestión de trabajos finales</h1>
+                    <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <h2>Accede a la plataforma</h2>
+                                    <form action="{% url 'usuarios:login' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="control-group">
+                                            <label class="control-label" for="usuario">Usuario</label>
+                                                <div class="controls">
+                                                    <input id="usuario" name="username" type="text" maxlength="60" required>
+                                                </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="password">Contraseña</label>
+                                                <div class="controls">
+                                                    <input id="password" name="password" type="password" maxlength="20" required><br><br>
+                                                </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <input class="btn btn-success" type="submit" value="Ingresar">
+                                            </div>
+                                        </div>
+                                    </form>                       
+                                </div>                
+                            </div>
+                        </div>
+                    <div class="col-md-3"></div>
+                </div>        
+                </div>
+{% endblock %} 
