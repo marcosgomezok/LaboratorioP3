@@ -34,8 +34,6 @@ def proyecto_integrante(request):
         except Alumno.DoesNotExist:
             messages.error(request, 'Error, Matricula Incorrecta')
             return render(request, 'alumno/integrante.html')
-    else:
-        print("hola")
     return render(request, 'alumno/integrante.html')
 
 def proyecto_create(request):
