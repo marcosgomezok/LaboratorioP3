@@ -1,0 +1,26 @@
+{% extends "base/alumno.html" %}
+{% block titulo %}Crear PTF{% endblock %}
+{% block child%}
+  <div class="container">
+      <div class="container-fluid">
+          <div class="centrar mb-3 mt-3 "><h3>Agrega integrantes a tu Proyecto de Trabajo Final</h3></div>
+          {% if messages %}
+          {% for message in messages %}
+              {% if message.tags == 'error' %}  <div class="errors" role="alert">{{ message }}</div>{% endif %}
+          {% endfor %}
+          {% endif %}
+          <form method="POST">
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Integrante(MU):</label>
+                <div class="col-sm-10">
+                    <input type="text" id="integrante-mu" name="integrante-mu"/>
+                </div>
+            </div>
+                <div class="centrar margin">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success">Aceptar</button>
+                </div>                                       
+          </form>
+              </div>
+      </div>
+{% endblock %}

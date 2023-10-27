@@ -12,6 +12,32 @@ def proyecto_lista(request):
     proyectos = User.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
+def proyecto_integrante(request):
+    if request.method == 'POST':
+        try:
+            #obtengo el proyecto asignado al usuario logeado
+            alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
+            integrante = Integrante.objects.get(alumno_id=alumno.id)
+            proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
+
+            #asigno el proyecto a un nuevo registro de integrantes
+            integrante = Integrante()
+            integrante.proyecto = proyecto
+
+            #asigno el alumno a un nuevo registro de integrantes
+            alumno = Alumno.objects.select_related('user').get(mu=request.POST.get("integrante-mu"))
+            if(Integrante.objects.filter(alumno_id=alumno.id).first()== None):
+                 integrante.alumno = alumno
+                 integrante.save()
+            else:
+                 messages.error(request, 'Error, Matricula Incorrecta')     
+        except Alumno.DoesNotExist:
+            messages.error(request, 'Error, Matricula Incorrecta')
+            return render(request, 'alumno/integrante.html')
+    else:
+        print("hola")
+    return render(request, 'alumno/integrante.html')
+
 def proyecto_create(request):
     if request.method == 'POST':
 

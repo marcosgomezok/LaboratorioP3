@@ -24,3 +24,7 @@ class AsesorAdmin(admin.ModelAdmin):
 @admin.register(Proyecto)
 class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("id","titulo")
+
+@admin.register(Integrante)
+class IntegranteAdmin(admin.ModelAdmin):
+    list_display = ("id","proyecto_id")
