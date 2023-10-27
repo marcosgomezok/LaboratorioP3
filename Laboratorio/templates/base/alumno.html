@@ -8,8 +8,9 @@
     <li><a href="{% url 'gestion:alumno' %}">Estado</a></li>
     <li><a href="{% url 'gestion:alumno' %}">Baja</a></li>
     <li><a href="{% url 'gestion:alumno' %}">Integrantes</a></li>
-    <li class="right"><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-    <li class="right"><a href="{% url 'gestion:alumno' %}"><i class="fas fa-user"></i> Alumno: Gomez Marcos</a></li>
+    
+    <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <a class="right inactive" href="{% url 'gestion:alumno' %}"><i class="fas fa-user"></i> Alumno: {{ request.user.username }}</a>
 </ul>
 {% block child %}
 {% endblock child %}   

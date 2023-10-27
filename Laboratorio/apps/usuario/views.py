@@ -4,25 +4,25 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from apps.persona.models import Docente,Alumno,Asesor
+from apps.persona.models import Docente,Alumno,Asesor,Persona
+from django.contrib.auth.models import User
 
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("usuarios:login"))
-    #return redirect('gestion/alumno', permanent=False)
-    #return render(request, "usuarios/usuario.html")
     try:
-        Alumno.objects.select_related('user').get(user_id=request.user.id)
-        return HttpResponseRedirect(reverse('gestion:alumno'))
-    except Alumno.DoesNotExist:
+        if(Alumno.objects.select_related('user').filter(user_id=request.user.id)):
+            return HttpResponseRedirect(reverse('gestion:alumno'))
+        if(Docente.objects.select_related('user').filter(user_id=request.user.id)):
+            if(request.user.groups.filter(name='Tribunal')):
+                return HttpResponseRedirect(reverse('gestion:tribunal'))
+            else:
+                return HttpResponseRedirect(reverse('gestion:cstf'))
+        if(request.user.is_superuser):
+            return HttpResponseRedirect(reverse('gestion:administrador'))
+    except User.DoesNotExist:
         return None
-    # try:
-    #     Alumno.objects.select_related('user').get(user_id=request.user.id)
-    #     return HttpResponseRedirect(reverse('gestion:alumno'))
-    # except Alumno.DoesNotExist:
-    #     return None
-    # alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
-    # print(alumno)
+
 
 def login_view(request):
     if request.method == "POST":

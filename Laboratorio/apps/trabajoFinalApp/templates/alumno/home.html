@@ -2,11 +2,5 @@
 {% block titulo %}Alumno{% endblock %}
 {% block child %}
     <div class="container">
-        <h1>Bienvenido, {{ request.user.first_name }}</h1>
-<ul>
-<li>Username: {{ request.user.username }}</li>
-<li>Email: {{ request.user.email }}</li>
-</ul>
-<a href="{% url 'usuarios:logout' %}">Log Out</a>
     </div>
 {% endblock %}   

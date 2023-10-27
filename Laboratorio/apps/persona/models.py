@@ -13,7 +13,6 @@ class Docente(Persona):
 class Alumno(Persona):
     dni = models.CharField(max_length=8,null=True)
     mu = models.CharField(max_length=200,unique=True,null=True)
-    email = models.CharField(max_length=200)
 
 class Asesor(Persona):
     cuil = models.CharField(max_length=200,unique=True,null=True)

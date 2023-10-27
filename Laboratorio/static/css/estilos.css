@@ -73,7 +73,14 @@ ul.topnav {
     padding-bottom: 10px;
     text-align: center;
 }
-  
+
+.topnav a.inactive:hover{
+  background-color: #333 ;
+  cursor:default;
+}
+/* a.inactive{
+  cursor:default;
+} */
 
 table {
     border-collapse: collapse;

@@ -4,8 +4,8 @@
 <ul class="topnav">
     <li><a class="active" href="#">Inicio</a></li>
     <li><a href="{% url 'gestion:cstf_evaluacion' %}">Evaluación</a></li>
-    <a class="right" href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
-    <a class="right" href="{% url 'gestion:cstf' %}"><i class="fas fa-user"></i> Docente: Rodriguez Pablo</a>
+    <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <a class="right inactive" href="{% url 'gestion:cstf' %}"><i class="fas fa-user"></i> Docente: {{ request.user.username }}</a>
 </ul>
 
 {% block child %}

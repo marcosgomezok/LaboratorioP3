@@ -22,11 +22,10 @@ class AlumnoForm(forms.ModelForm):
     apellido = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
     dni = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
     mu = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
-    email = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
 
     class Meta:
         model = Alumno
-        fields = ('nombre', 'apellido', 'dni', 'mu', 'email',)
+        fields = ('nombre', 'apellido', 'dni', 'mu')
 
 class DocenteForm(forms.ModelForm):
     nombre = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
@@ -48,9 +47,10 @@ class AsesorForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    email = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control","type": "email"}))
     password = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control","type": "password"}))
 
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'email')
 

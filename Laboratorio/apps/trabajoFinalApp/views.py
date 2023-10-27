@@ -100,7 +100,7 @@ def administrador_alumno_alta(request):
         if form_alumno.is_valid():
             temp_user = form_user.save(commit=False)
             alumno = form_alumno.save(commit=False)
-            user = User.objects.create_user(temp_user.username, alumno.email, temp_user.password)
+            user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
             user.save()
             group = Group.objects.get(name='Alumno')
             user.groups.add(group)
@@ -122,16 +122,28 @@ def administrador_docente_alta(request):
     if request.method == 'POST':
 
         form_docente = DocenteForm(request.POST, prefix='form_docente')
+        form_user = UserForm(request.POST, prefix='form_user')
 
         if form_docente.is_valid():
-            form_docente.save()
+            temp_user = form_user.save(commit=False)
+            docente = form_docente.save(commit=False)
+            user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
+            user.save()
+            group = Group.objects.get(name=request.POST.get("form_docente-rol"))
+            user.groups.add(group)
+            docente.user = user
+            docente.save()
             form_docente = DocenteForm()
+            form_user = UserForm()
+
 
     else:
         form_docente = DocenteForm( prefix='form_docente')
+        form_user = UserForm( prefix='form_user')
 
     return render(request, "administrador/personas/docenteAlta.html", {
         'form_docente': form_docente,
+        'form_user': form_user,
     })
 
 def administrador_asesor_alta(request):
