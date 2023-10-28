@@ -87,7 +87,12 @@ def proyecto_entrega(request):
                         dictamen.dictamen_mov=movimiento
                         dictamen.save()
                     if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
-                        dictamen = Dictamen(dictamen_mov=dictamen.dictamen_mov)
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'proyecto_presentado'
+                        movimiento.movimiento_proyecto=proyecto
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
                         dictamen.save()
                           
                 return render(request, 'alumno/entrega.html', {
@@ -150,6 +155,8 @@ def registro_cstf(request):
         try:
             comisiones = Cstf.objects.all()
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None)
+            dictamen = Movimiento.objects.select_related('archivo_mov','dictamen_mov')
+            print(dictamen.query)
             if request.method=='POST':
                 if 'agregar-comision' in request.POST:    
                     cstf = Cstf(fecha_creacion=datetime.now())
