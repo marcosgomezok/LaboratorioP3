@@ -149,7 +149,7 @@ def proyecto_registro(request):
 def registro_cstf(request):
         try:
             comisiones = Cstf.objects.all()
-            docentes = Docente.objects.select_related('docente').filter(docente__docente_id=None)
+            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None)
             if request.method=='POST':
                 if 'agregar-comision' in request.POST:    
                     cstf = Cstf(fecha_creacion=datetime.now())
