@@ -8,7 +8,7 @@
         <div class="form-group row">
           <label class="col-sm-1 col-form-label">Docente:</label>
             <div class="col-sm-2">
-                <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                <select class="form-select"type="text" id="integrante-mu" name="integrante-mu"/>
                 {% for docente in docentes %}
                 <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
               {% endfor %}
@@ -18,7 +18,7 @@
         <div class="form-group row">
           <label class="col-sm-1 col-form-label">CSTF:</label>
             <div class="col-sm-2">
-                <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                <select class="form-select"type="text" id="integrante-mu" name="integrante-mu"/>
                 {% for comision in comisiones %}
                   <option value={{comision.id}}>Comisión {{comision.id}}</option>
                 {% endfor %}
