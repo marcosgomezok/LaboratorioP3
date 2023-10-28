@@ -9,6 +9,9 @@
           <label class="col-sm-1 col-form-label">Docente:</label>
             <div class="col-sm-2">
                 <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                {% for docente in docentes %}
+                <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
+              {% endfor %}
                 </select>
               </div>
         </div>
@@ -16,19 +19,22 @@
           <label class="col-sm-1 col-form-label">CSTF:</label>
             <div class="col-sm-2">
                 <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                {% for comision in comisiones %}
+                  <option value={{comision.id}}>Comisión {{comision.id}}</option>
+                {% endfor %}
                 </select>
               </div>
               <div class="col-sm-4">
 
-                <button type="button" class="btn btn-success">Agregar Nueva Comisión</button>
+                <button type="submit" class="btn btn-success" name="agregar-comision">Agregar Nueva Comisión</button>
                 <label >(Si no existe la comisión, puedes crearla.)</label>
               </div>
         </div>
             <div class="centrar margin">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success">Guardar</button>
+              <button type="submit" class="btn btn-success" name="agregar-miembro">Guardar</button>
             </div>                                       
+            {% csrf_token %}
       </form>
-          </div>
+      </div>
   </div>
 {% endblock child%}   

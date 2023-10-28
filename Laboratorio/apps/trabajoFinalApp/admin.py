@@ -35,3 +35,6 @@ class MovimientoAdmin(admin.ModelAdmin):
 @admin.register(Dictamen)
 class DictamenAdmin(admin.ModelAdmin):
     list_display = ("id","resultado_dictamen")
+@admin.register(Cstf)
+class CstfAdmin(admin.ModelAdmin):
+    list_display = ("id","fecha_creacion")

@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento
-from apps.persona.models import Alumno
+from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf
+from apps.persona.models import Alumno,Docente
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
@@ -147,9 +147,20 @@ def proyecto_registro(request):
                   {'proyectos': proyectos})
 
 def registro_cstf(request):
-         proyectos = User.objects.get(id=1)
-         return render(request, "administrador/CSTFs/regCSTF.html",
-                  {'proyectos': proyectos})
+        try:
+            comisiones = Cstf.objects.all()
+            docentes = Docente.objects.select_related('docente').filter(docente__docente_id=None)
+            if request.method=='POST':
+                if 'agregar-comision' in request.POST:    
+                    cstf = Cstf(fecha_creacion=datetime.now())
+                    cstf.save() 
+                    return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
+            if request.method=='POST':
+                if 'agregar-miembro' in request.POST: 
+                    print("boton miembro")
+            return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
+        except Cstf.DoesNotExist:
+            return render(request, "administrador/CSTFs/regCSTF.html")
 
 def proyecto_evaluacion_cstf(request):
          proyectos = User.objects.get(id=1)
