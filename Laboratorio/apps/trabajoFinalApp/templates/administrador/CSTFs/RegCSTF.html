@@ -3,41 +3,31 @@
 {% block child %}
 <div class="container">
   <div class="container-fluid">
-      <div class="centrar mb-3 mt-3 "><h3>Registrarse como miembro de la comision de seguimiento de trabajo final.</h3></div>
-      <form method="post" action="#">
+      <div class="centrar mb-3 mt-3 "><h3>Agrega miembros a una Comisión de Seguimiento de Trabajo Final</h3></div>
+      <form method="POST">
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Repetir contraseña</label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" name="re_password" id="re_password" required>
-            </div>
+          <label class="col-sm-1 col-form-label">Docente:</label>
+            <div class="col-sm-2">
+                <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                </select>
+              </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Apellido</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="apellido" name="apellido" required>
-            </div>
+          <label class="col-sm-1 col-form-label">CSTF:</label>
+            <div class="col-sm-2">
+                <select class="form-control"type="text" id="integrante-mu" name="integrante-mu"/>
+                </select>
+              </div>
+              <div class="col-sm-4">
+
+                <button type="button" class="btn btn-success">Agregar Nueva Comisión</button>
+                <label >(Si no existe la comisión, puedes crearla.)</label>
+              </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Nombre</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="nombre" name="nombre" required>
-            </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">CUIL</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control" id="cuil" name="cuil" required>
-            </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Email (opcional)</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="mail" name="email">
-            </div>
-        </div>         
-        <div class="centrar margin">
-          <button type="submit" class="btn btn-success">Aceptar</button>
-        </div>                                       
+            <div class="centrar margin">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Guardar</button>
+            </div>                                       
       </form>
           </div>
   </div>
