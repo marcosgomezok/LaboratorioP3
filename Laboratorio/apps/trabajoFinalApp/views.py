@@ -65,7 +65,7 @@ def proyecto_entrega(request):
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
-        dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).first()
+        dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).last()
         
         if request.method == 'POST':
             if dictamen is None:
@@ -77,15 +77,19 @@ def proyecto_entrega(request):
                 dictamen.dictamen_mov=movimiento
                 dictamen.save()
             else:
-                # if(dictamen.resultado_dictamen == 'aceptado'):
-                dictamen = Dictamen()
-                movimiento = Movimiento()
-                movimiento.tipo_mov = 'evaluacion_cstf'
-                movimiento.movimiento_proyecto=proyecto
-                movimiento.save()
-                dictamen.dictamen_mov=movimiento
-                dictamen.save()
-                     
+                if(dictamen.dictamen_mov.tipo_mov == 'proyecto_presentado'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_cstf'
+                        movimiento.movimiento_proyecto=proyecto
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen(dictamen_mov=dictamen.dictamen_mov)
+                        dictamen.save()
+                          
                 return render(request, 'alumno/entrega.html', {
                      'proyecto': proyecto,
                      'dictamen':dictamen,
