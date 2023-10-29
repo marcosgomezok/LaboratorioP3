@@ -115,6 +115,8 @@ def proyecto_create(request):
             alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
             if form_proyecto.is_valid():
                     proyecto_instance = form_proyecto.save()
+                    proyecto_instance.cstf_proyecto = Cstf.objects.first()
+                    proyecto_instance.save()
                     integrante = Integrante()
                     integrante.alta_proyecto =datetime.now()
                     integrante.alumno = alumno
@@ -174,11 +176,6 @@ def registro_cstf(request):
         except Cstf.DoesNotExist:
             return render(request, "administrador/CSTFs/regCSTF.html")
 
-def proyecto_evaluacion_cstf(request):
-         proyectos = User.objects.get(id=1)
-         return render(request, "cstf/evaluacion.html",
-                  {'proyectos': proyectos})
-
 def alumno(request):
          alumnos = User.objects.get(id=1)
          return render(request, "alumno/home.html",
@@ -192,9 +189,11 @@ def cstf(request):
          return render(request, "cstf/home.html",
                   {'cstf': cstf})
 def cstf_evaluacion(request):
-         cstf = User.objects.get(id=1)
-         return render(request, "cstf/evaluacion.html",
-                  {'cstf': cstf})
+        docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
+        miembro = Miembro_Cstf.objects.filter(docente=docente.id).first()
+        dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__cstf_proyecto=miembro.comision_cstf,dictamen_mov__tipo_mov='proyecto_presentado')
+        print(dictamenes)
+        return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes})
 
 def tribunal(request):
          tribunal = User.objects.get(id=1)

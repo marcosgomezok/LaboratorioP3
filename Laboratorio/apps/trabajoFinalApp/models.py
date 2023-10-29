@@ -32,8 +32,8 @@ class Proyecto(models.Model):
     director = models.OneToOneField(Docente, on_delete=models.SET_NULL,null=True, blank=True,related_name='director')
     co_director = models.OneToOneField(Docente, on_delete=models.SET_NULL,null=True, blank=True,related_name='co_director')
     asesor = models.OneToOneField(Asesor, on_delete=models.SET_NULL,null=True, blank=True,related_name='asesor')
-    cstf_proyecto = models.OneToOneField(Cstf, on_delete=models.CASCADE,null=True, blank=True,related_name='cstf_proyecto')
-    tribunal_proyecto = models.OneToOneField(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_proyecto')
+    cstf_proyecto = models.ForeignKey(Cstf, on_delete=models.CASCADE,null=True, blank=True,related_name='cstf_proyecto')
+    tribunal_proyecto = models.ForeignKey(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_proyecto')
 
 class RegistroDirector(models.Model):
     alta_proyecto = models.DateField(null=True, blank=True)

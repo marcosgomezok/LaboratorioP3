@@ -46,7 +46,7 @@
               <label class="col-sm-1 col-form-label">Estado:</label>
                 <div class="col-sm-11">
                     {% if dictamen.resultado_dictamen is null or blank %}
-                    <label class="col-form-label">En espera</label>
+                    <label class="col-form-label">Pendiente</label>
                   {% else %}
                     <label class="col-form-label">{{dictamen.get_resultado_dictamen_display}}</label>
                   {% endif %}
