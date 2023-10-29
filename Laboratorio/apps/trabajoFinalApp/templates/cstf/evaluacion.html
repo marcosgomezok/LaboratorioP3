@@ -66,31 +66,27 @@
                                             <th>Observación</th>
                                             <th>Informe</th>
                                         </tr>
-    
+                                        {% for dictamen in dictamenes %}
                                         <tr>
-                                            <td><div><label id="title">Estudio de malware y su comportamiento.</label> </div></td>
-                                            <td><div><label id="description">Analizar y comprender el funcionamiento de software malicioso o malware.</label> </div></td>
-                                            <td><div><label id="fp1">03/11/2023</label> </div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Evaluar</button></div></td>
-                                            <td><div><label id="fp12">Pendiente</label></div></td>
-                                            <td><div><label id="fp12">Pendiente</label></div></td>
-                                        </tr>       
-                                        <tr>
-                                            <td><div><label id="title2">Investigación en protocolos de comunicación eficientes.</label> </div></td>
-                                            <td><div><label id="description2">Desarrollar y mejorar los métodos de intercambio de datos entre dispositivos y sistemas informáticos.</label> </div></td>
-                                            <td><div><label id="fp2">03/11/2023</label> </div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div> <a href="#">Descargar</a></div></td>
-                                            <td><div><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Evaluar</button></div></td>
-                                            <td><div><label id="fp22">Pendiente</label></div></td>
-                                            <td><div><label id="fp22">Pendiente</label></div></td>
-                                        </tr>       
+                                            <td><div><label id="title{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.titulo}}</label> </div></td>
+                                            <td><div><label id="description{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.descripcion}}</label> </div></td>
+                                            <td><div><label id="fp{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.presentacion_ptf}}</label> </div></td>
+                                            <td><div> <label id="mov{{dictamen.id}}">{{dictamen.dictamen_mov.id}}</label></div></td>
+                                            <td><div> <label id="datemov{{dictamen.id}}">{{dictamen.dictamen_mov.fecha_mov}}</label></div></td>
+                                            <td><div> <label id="finmov{{dictamen.id}}">{{dictamen.dictamen_mov.fin_mov}}</label></div></td>
+                                            <td><div><button type="button" id="button{{dictamen.id}}"name="button{{dictamen.id}}"class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Evaluar</button></div></td>
+                                            <td><div> 
+                                            {% if dictamen.resultado_dictamen is null or blank %}
+                                                <label id="estado{{dictamen.id}}">Pendiente</label>
+                                            {% else %}
+                                                <label id="estado{{dictamen.id}}">{{dictamen.get_resultado_dictamen_display}}</label>
+                                            {% endif %}
+                                            </div></td>
+                                            <td><div> <label id="estado{{dictamen.id}}">{{dictamen.observacion}}</label></div></td>
+                                            <td><div><a  href="#" download="archivo.html">Descargar</a></div></td>
+                                        </tr>  
+                                        {% endfor %}
+                                        
                                     </table>
                                 </fieldset>
                         <br>
