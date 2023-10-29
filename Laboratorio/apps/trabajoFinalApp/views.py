@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf
+from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf,Tribunal,Miembro_Titular,Miembro_Suplente
 from apps.persona.models import Alumno,Docente
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
@@ -163,28 +163,6 @@ def proyecto_registro(request):
          return render(request, "registro/registro.html",
                   {'proyectos': proyectos})
 
-def registro_cstf(request):
-        try:
-            comisiones = Cstf.objects.all()
-            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None)
-            if request.method=='POST':
-                if 'agregar-comision' in request.POST:    
-                    cstf = Cstf(fecha_creacion=datetime.now())
-                    cstf.save() 
-                    return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
-            if request.method=='POST':
-                if 'agregar-miembro' in request.POST: 
-                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
-                    comision = Cstf.objects.filter(id=request.POST.get("comision-id")).first()
-                    miembro = Miembro_Cstf()
-                    miembro.docente = docente
-                    miembro.comision_cstf = comision
-                    miembro.save()
-                    group = Group.objects.get(name='CSTF')
-                    docente.user.groups.add(group)
-            return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
-        except Cstf.DoesNotExist:
-            return render(request, "administrador/CSTFs/regCSTF.html")
 
 def alumno(request):
          alumnos = User.objects.get(id=1)
@@ -223,6 +201,61 @@ def tribunal(request):
          tribunal = User.objects.get(id=1)
          return render(request, "tribunal/home.html",
                   {'tribunal': tribunal})
+
+def tribunal_evaluacion_ptf(request):
+         return render(request, "tribunal/evaluacionPTF.html")
+
+def registro_cstf(request):
+        try:
+            comisiones = Cstf.objects.all()
+            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None)
+            if request.method=='POST':
+                if 'agregar-comision' in request.POST:    
+                    cstf = Cstf(fecha_creacion=datetime.now())
+                    cstf.save() 
+                    return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
+            if request.method=='POST':
+                if 'agregar-miembro' in request.POST: 
+                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
+                    comision = Cstf.objects.filter(id=request.POST.get("comision-id")).first()
+                    miembro = Miembro_Cstf()
+                    miembro.docente = docente
+                    miembro.comision_cstf = comision
+                    miembro.save()
+                    group = Group.objects.get(name='CSTF')
+                    docente.user.groups.add(group)
+            return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
+        except Cstf.DoesNotExist:
+            return render(request, "administrador/CSTFs/regCSTF.html")
+        
+def tribunal_nuevo(request):
+        try:
+            tribunales = Tribunal.objects.all()
+            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None)
+            print(docentes.query)
+            if request.method=='POST':
+                if 'agregar-tribunal' in request.POST:    
+                    tribunal = Tribunal()
+                    tribunal.save() 
+                    return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
+            if request.method=='POST':
+                if 'agregar-miembro' in request.POST: 
+                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
+                    tribunal = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
+                    if(request.POST.get("form_docente-rol")=='titular'):
+                        miembro = Miembro_Titular()
+                        miembro.tribunal_mt = tribunal
+                        miembro.vocal_titular = docente
+                    else:
+                        miembro = Miembro_Suplente()
+                        miembro.tribunal_ms = tribunal
+                        miembro.vocal_suplente = docente
+                    miembro.save()
+                    group = Group.objects.get(name='Tribunal')
+                    docente.user.groups.add(group)
+            return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
+        except Tribunal.DoesNotExist:
+            return render(request, "administrador/tribunales/alta.html")
 
 def administrador(request):
          administrador = User.objects.get(id=1)

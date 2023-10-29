@@ -9,6 +9,7 @@ urlpatterns = [
     path('cstf', views.cstf, name='cstf'),
     path('cstf/evaluacion', views.cstf_evaluacion, name='cstf_evaluacion'),
     path('tribunal', views.tribunal, name='tribunal'),
+    path('tribunal/evaluacion/ptf', views.tribunal_evaluacion_ptf, name='tribunal_evaluacion_ptf'),
     path('administrador', views.administrador, name='administrador'),
     path('administrador/estadisticas', views.administrador_estadisticas, name='administrador_estadisticas'),
     path('administrador/estadisticas/listado/proyectos', views.proyecto_lista, name='proyecto_lista'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('alumno/proyecto/entrega', views.proyecto_entrega, name='proyecto_entrega'),
     path('registro/', views.proyecto_registro, name='proyecto_registro'),
     path('administrador/cstf/nuevo', views.registro_cstf, name='registro_cstf'),
+    path('administrador/tribunal/nuevo', views.tribunal_nuevo, name='tribunal_nuevo'),
 ]
