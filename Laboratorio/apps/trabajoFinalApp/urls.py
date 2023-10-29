@@ -11,6 +11,7 @@ urlpatterns = [
     path('tribunal', views.tribunal, name='tribunal'),
     path('tribunal/evaluacion/ptf', views.tribunal_evaluacion_ptf, name='tribunal_evaluacion_ptf'),
     path('tribunal/evaluacion/borrador', views.tribunal_evaluacion_borrador, name='tribunal_evaluacion_borrador'),
+    path('tribunal/evaluacion/final', views.tribunal_evaluacion_final, name='tribunal_evaluacion_final'),
     path('administrador', views.administrador, name='administrador'),
     path('administrador/estadisticas', views.administrador_estadisticas, name='administrador_estadisticas'),
     path('administrador/estadisticas/listado/proyectos', views.proyecto_lista, name='proyecto_lista'),
