@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 class ProyectoForm(forms.ModelForm):
     titulo = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
     descripcion = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
-    # presentacion_ptf = forms.DateField(DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     class Meta:
         model = Proyecto
         fields = ('titulo', 'descripcion','presentacion_ptf')
