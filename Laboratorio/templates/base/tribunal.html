@@ -4,7 +4,8 @@
 <ul class="topnav">
     <li><a class="active" href="#">Inicio</a></li>
     <li><a href="{% url 'gestion:tribunal_evaluacion_ptf' %}">Evaluación PTF</a></li>
-    <li><a href="{% url 'gestion:tribunal' %}">Evaluación BITF</a></li>
+    <li><a href="{% url 'gestion:tribunal_evaluacion_borrador' %}">Evaluación BITF</a></li>
+    <li><a href="{% url 'gestion:tribunal' %}">Defensa TF</a></li>
     <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
     <a class="right inactive" href="{% url 'gestion:tribunal' %}"><i class="fas fa-user"></i> Docente: {{ request.user.username }}</a>
 </ul>

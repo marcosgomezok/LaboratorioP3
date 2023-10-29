@@ -121,6 +121,23 @@ def proyecto_entrega(request):
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
                         dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_borrador'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_final'
+                        movimiento.movimiento_proyecto=proyecto
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_borrador'
+                        movimiento.movimiento_proyecto=proyecto
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
                           
                 return render(request, 'alumno/entrega.html', {
                      'proyecto': proyecto,
@@ -242,6 +259,30 @@ def tribunal_evaluacion_ptf(request):
                   editar = None
             return render(request, "tribunal/evaluacionPTF.html",{'dictamenes': dictamenes,'editar':editar})
          return render(request, "tribunal/evaluacionPTF.html",{'dictamenes': dictamenes})
+
+def tribunal_evaluacion_borrador(request):
+         docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
+         miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
+         if(miembro is not None):
+            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_mt,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
+         else:  
+            miembro = Miembro_Suplente.objects.filter(vocal_suplente=docente.id).first()
+            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
+         if request.method == 'POST':   
+            editar = dictamenes.filter(id=request.POST.get("proyecto-id")).first()
+
+            if 'guardar-edicion' in request.POST: 
+                editar = dictamenes.filter(id=request.POST.get("proyecto-id-2")).first()
+
+                editar.resultado_dictamen = request.POST.get("resultado_dictamen")
+                editar.observacion = request.POST.get("observacion")
+                editar.save()
+
+                editar = None
+            if 'cancelar-edicion' in request.POST: 
+                  editar = None
+            return render(request, "tribunal/evaluacionBTF.html",{'dictamenes': dictamenes,'editar':editar})
+         return render(request, "tribunal/evaluacionBTF.html",{'dictamenes': dictamenes})
 
 def registro_cstf(request):
         try:
