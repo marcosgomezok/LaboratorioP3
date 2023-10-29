@@ -292,14 +292,24 @@ def administrador_asesor_alta(request):
     if request.method == 'POST':
 
         form_asesor = AsesorForm(request.POST, prefix='form_asesor')
+        form_user = UserForm(request.POST, prefix='form_user')
 
         if form_asesor.is_valid():
-            form_asesor.save()
-            form_asesor = AsesorForm()
 
+            temp_user = form_user.save(commit=False)
+            asesor = form_asesor.save(commit=False)
+            user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
+            user.save()
+
+            asesor.user = user
+            asesor.save()
+            form_asesor = AsesorForm()
+            form_user = UserForm()
     else:
         form_asesor = AsesorForm( prefix='form_asesor')
+        form_user = UserForm( prefix='form_user')
 
     return render(request, "administrador/personas/asesorAlta.html", {
         'form_asesor': form_asesor,
+        'form_user': form_user,
     })

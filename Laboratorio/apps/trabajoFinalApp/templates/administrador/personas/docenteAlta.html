@@ -5,40 +5,45 @@
     <div class="container-fluid">
         <div class="centrar mb-3 mt-3 "><h3>Registrar Docente.</h3></div>
         <form method="POST">
-          <div class="form-group row">
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Usuario</label>
-              <div class="col-sm-10">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-1 col-form-label">Usuario</label>
+              <div class="col-sm-7">
                 {{form_user.username}}
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-1 col-form-label">Email</label>
+                <div class="col-sm-7">
                   {{form_user.email}}
                 </div>
             </div>         
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Contraseña</label>
-                <div class="col-sm-10"> 
+              <div class="col-sm-2"></div>
+              <label class="col-sm-1 col-form-label">Contraseña</label>
+                <div class="col-sm-7"> 
                   {{form_user.password}}
                 </div>
               </div>
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Apellido</label>
-                <div class="col-sm-10">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-1 col-form-label">Apellido</label>
+                <div class="col-sm-7">
                   {{form_docente.apellido}}
                 </div>
             </div>
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label">Nombre</label>
-                <div class="col-sm-10">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-1 col-form-label">Nombre</label>
+                <div class="col-sm-7">
                   {{form_docente.nombre}}
                 </div>
             </div>
           <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Cuil</label>
-              <div class="col-sm-10">
+            <div class="col-sm-2"></div>
+            <label class="col-sm-1 col-form-label">Cuil</label>
+              <div class="col-sm-7">
                 {{form_docente.cuil}}
               </div>
           </div>
@@ -46,9 +51,9 @@
 
 
           <div class="centrar margin">
-            {% csrf_token %}
             <button type="submit" class="btn btn-success">Aceptar</button>
           </div>                                       
+          {% csrf_token %}
         </form>
             </div>
     </div>

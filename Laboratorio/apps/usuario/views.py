@@ -21,6 +21,8 @@ def index(request):
                 return HttpResponseRedirect(reverse('gestion:cstf'))
             else:
                 return HttpResponseRedirect(reverse('gestion:docente'))
+        if(Asesor.objects.select_related('user').filter(user_id=request.user.id)):
+            return HttpResponseRedirect(reverse('gestion:docente'))
         if(request.user.is_superuser):
             return HttpResponseRedirect(reverse('gestion:administrador'))
     except User.DoesNotExist:
