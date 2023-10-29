@@ -5,6 +5,7 @@ from apps.trabajoFinalApp import views
 app_name = 'gestion'
 urlpatterns = [
     path('alumno/', views.alumno, name='alumno'),
+    path('docente/', views.docente, name='docente'),
     path('cstf', views.cstf, name='cstf'),
     path('cstf/evaluacion', views.cstf_evaluacion, name='cstf_evaluacion'),
     path('tribunal', views.tribunal, name='tribunal'),

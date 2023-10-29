@@ -155,8 +155,6 @@ def registro_cstf(request):
         try:
             comisiones = Cstf.objects.all()
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None)
-            dictamen = Movimiento.objects.select_related('archivo_mov','dictamen_mov')
-            print(dictamen.query)
             if request.method=='POST':
                 if 'agregar-comision' in request.POST:    
                     cstf = Cstf(fecha_creacion=datetime.now())
@@ -164,7 +162,14 @@ def registro_cstf(request):
                     return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
             if request.method=='POST':
                 if 'agregar-miembro' in request.POST: 
-                    print("boton miembro")
+                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
+                    comision = Cstf.objects.filter(id=request.POST.get("comision-id")).first()
+                    miembro = Miembro_Cstf()
+                    miembro.docente = docente
+                    miembro.comision_cstf = comision
+                    miembro.save()
+                    group = Group.objects.get(name='CSTF')
+                    docente.user.groups.add(group)
             return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
         except Cstf.DoesNotExist:
             return render(request, "administrador/CSTFs/regCSTF.html")
@@ -178,6 +183,9 @@ def alumno(request):
          alumnos = User.objects.get(id=1)
          return render(request, "alumno/home.html",
                   {'alumnos': alumnos})
+
+def docente(request):
+         return render(request, "docente/home.html")
 
 def cstf(request):
          cstf = User.objects.get(id=1)
@@ -241,8 +249,7 @@ def administrador_docente_alta(request):
             docente = form_docente.save(commit=False)
             user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
             user.save()
-            group = Group.objects.get(name=request.POST.get("form_docente-rol"))
-            user.groups.add(group)
+
             docente.user = user
             docente.save()
             form_docente = DocenteForm()

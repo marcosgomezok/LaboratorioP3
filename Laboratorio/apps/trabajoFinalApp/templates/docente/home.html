@@ -1,0 +1,9 @@
+{% extends "base/base.html" %}
+{% block titulo %}Docente{% endblock %}
+{% block contenido %}
+<ul class="topnav">
+    <li><a class="active" href="{% url 'gestion:docente' %}">Inicio</a></li>
+    <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <a class="right inactive" href="{% url 'gestion:docente' %}"><i class="fas fa-user"></i> Docente: {{ request.user.username }}</a>
+</ul>
+{% endblock contenido%}   

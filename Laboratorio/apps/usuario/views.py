@@ -17,8 +17,10 @@ def index(request):
         if(Docente.objects.select_related('user').filter(user_id=request.user.id)):
             if(request.user.groups.filter(name='Tribunal')):
                 return HttpResponseRedirect(reverse('gestion:tribunal'))
-            else:
+            if(request.user.groups.filter(name='CSTF')):
                 return HttpResponseRedirect(reverse('gestion:cstf'))
+            else:
+                return HttpResponseRedirect(reverse('gestion:docente'))
         if(request.user.is_superuser):
             return HttpResponseRedirect(reverse('gestion:administrador'))
     except User.DoesNotExist:
