@@ -75,6 +75,7 @@ def proyecto_entrega(request):
                 movimiento.movimiento_proyecto=proyecto
                 movimiento.save()
                 dictamen.dictamen_mov=movimiento
+                dictamen.resultado_dictamen='aceptado'
                 dictamen.save()
             else:
                 if(dictamen.dictamen_mov.tipo_mov == 'proyecto_presentado'):
@@ -86,10 +87,19 @@ def proyecto_entrega(request):
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
                         dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_cstf'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_tribunal'
+                        movimiento.movimiento_proyecto=proyecto
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
                     if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
-                        movimiento.tipo_mov = 'proyecto_presentado'
+                        movimiento.tipo_mov = 'evaluacion_cstf'
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -191,8 +201,22 @@ def cstf(request):
 def cstf_evaluacion(request):
         docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
         miembro = Miembro_Cstf.objects.filter(docente=docente.id).first()
-        dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__cstf_proyecto=miembro.comision_cstf,dictamen_mov__tipo_mov='proyecto_presentado')
+        dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__cstf_proyecto=miembro.comision_cstf,dictamen_mov__tipo_mov='evaluacion_cstf',resultado_dictamen=None)
         print(dictamenes)
+        if request.method == 'POST':   
+            editar = dictamenes.filter(id=request.POST.get("proyecto-id")).first()
+
+            if 'guardar-edicion' in request.POST: 
+                editar = dictamenes.filter(id=request.POST.get("proyecto-id-2")).first()
+
+                editar.resultado_dictamen = request.POST.get("resultado_dictamen")
+                editar.observacion = request.POST.get("observacion")
+                editar.save()
+
+                editar = None
+            if 'cancelar-edicion' in request.POST: 
+                  editar = None
+            return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes,'editar':editar})
         return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes})
 
 def tribunal(request):

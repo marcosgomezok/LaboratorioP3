@@ -8,51 +8,11 @@
         <a class="right" href="{% url 'gestion:cstf' %}"><i class="fas fa-user"></i> Docente: Rodriguez Pablo</a>
     </ul>
     <div class="container">
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Resolver como:</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form method="post" action="evaluacion.html">
-                        <div class="modal-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="aceptado" value="aceptado" onchange="disableBox(value)">
-                                <label class="form-check-label" for="aceptado">
-                                    Aceptado
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="observado" value="observado" onchange="disableBox(value)"checked>
-                                <label class="form-check-label" for="observado">
-                                    Observado
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="rechazado" value="rechazado" onchange="disableBox(value)">
-                                <label class="form-check-label" for="rechazado">
-                                    Rechazado
-                                </label>
-                              </div>
-                              <label for="observacion" class="form-label">Agregar observación:</label>
-                              <textarea id="observacion" class="form-control" aria-label="With textarea" required></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <input type="submit" class="btn btn-primary">
-                        </div>
-                    </form>
-                </div>
-                </div>
-            </div>
-            <!-- -->
                 <div class="container-fluid">
     
-                                <div class="centrar mb-3"><h3>Listado de PTF a evaluar por CSTF.</h3></div>
+                                <div class="centrar mb-3"><h3>Listado de PTF a evaluar por CSTF:</h3></div>
                                 <div class="tabla_nth_child">
-                                <fieldset>
+                                    <fieldset>
                                     <table>
                                         <tr>
                                             <th>Titulo</th>
@@ -61,7 +21,6 @@
                                             <th>MovimientoID</th>
                                             <th>Fecha de movimiento</th>
                                             <th>Plazo</th>
-                                            <th>Acción</th>
                                             <th>Estado</th>
                                             <th>Observación</th>
                                             <th>Informe</th>
@@ -74,23 +33,75 @@
                                             <td><div> <label id="mov{{dictamen.id}}">{{dictamen.dictamen_mov.id}}</label></div></td>
                                             <td><div> <label id="datemov{{dictamen.id}}">{{dictamen.dictamen_mov.fecha_mov}}</label></div></td>
                                             <td><div> <label id="finmov{{dictamen.id}}">{{dictamen.dictamen_mov.fin_mov}}</label></div></td>
-                                            <td><div><button type="button" id="button{{dictamen.id}}"name="button{{dictamen.id}}"class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Evaluar</button></div></td>
                                             <td><div> 
-                                            {% if dictamen.resultado_dictamen is null or blank %}
+                                                {% if dictamen.resultado_dictamen is null or blank %}
                                                 <label id="estado{{dictamen.id}}">Pendiente</label>
                                             {% else %}
-                                                <label id="estado{{dictamen.id}}">{{dictamen.get_resultado_dictamen_display}}</label>
+                                            <label id="estado{{dictamen.id}}">{{dictamen.get_resultado_dictamen_display}}</label>
                                             {% endif %}
-                                            </div></td>
-                                            <td><div> <label id="estado{{dictamen.id}}">{{dictamen.observacion}}</label></div></td>
+                                        </div></td>
+                                        <td><div> <label id="estado{{dictamen.id}}">{{dictamen.observacion}}</label></div></td>
                                             <td><div><a  href="#" download="archivo.html">Descargar</a></div></td>
                                         </tr>  
                                         {% endfor %}
                                         
                                     </table>
                                 </fieldset>
-                        <br>
-                        </div>
+                                <br>
+                            </div>
+                            <div class="mb-3"><h4>Selecciona el proyecto a evaluar:</h4></div>
+                            <form method="POST">
+                                
+  
+                                <div class="form-group row">
+                                    <label class="col-sm-1 col-form-label">Proyecto:</label>
+                                    <div class="col-sm-7">
+                                        {% if editar is not null or blank %}
+                                        <input class="form-control"name="proyecto-id-2"  id="proyecto-id-2" value="{{editar.id}}" hidden/>
+                                        <label class="form-control">#{{editar.dictamen_mov.movimiento_proyecto.id}} {{editar.dictamen_mov.movimiento_proyecto.titulo}} </label>
+                                        {%else%}
+                                        <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
+                                        {% for dictamen in dictamenes %}
+                                        <option value={{dictamen.id}}>#{{dictamen.dictamen_mov.movimiento_proyecto.id}} {{dictamen.dictamen_mov.movimiento_proyecto.titulo}} </option>
+                                      {% endfor %}
+                                        </select>
+
+                                        {% endif %}
+                                      </div>
+                                      <div class="col-sm-2">
+                                          <button type="submit" class="btn btn-success" name="evaluar"{% if editar is not null or blank %}disabled{% endif %}>Evaluar</button>
+                                        </div>
+                                </div>
+                                  {% if editar is not null or blank %}
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label">Estado</label>
+                                  <div class="col-sm-2">
+                                    <select class="form-select"type="text" id="resultado_dictamen" name="resultado_dictamen"/>
+                                    <option value=aceptado>Aceptado</option>
+                                    <option value=rechazado>Rechazado</option>
+                                    <option value=observado>Observado</option>
+                                    </select>
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-sm-1 col-form-label">Observación</label>
+                                  <div class="col-sm-11"> 
+                                    <textarea type="text" class="form-control" id="observacion" name="observacion"></textarea>
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-sm-1 col-form-label">Informe</label>
+                                  <div class="col-sm-7">
+                                    <input type="file" class="form-control" id="adjuntos" >
+                                  </div>
+                              </div>                                         
+                              <div class="centrar margin">
+                                <button type="submit" class="btn btn-danger" name="cancelar-edicion">Cancelar</button>
+                                <button type="submit" class="btn btn-success" name="guardar-edicion">Guardar</button>
+                              </div>    
+                            {% endif %}
+                              {% csrf_token %}
+                              </form>
                 </div>
         </div>
-{% endblock %}   
+        {% endblock %}   
