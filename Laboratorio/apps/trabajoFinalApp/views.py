@@ -11,7 +11,7 @@ from datetime import datetime
 from django.utils import timezone
 
 def proyecto_lista(request):
-    proyectos = User.objects.get(id=1)#select_related('dictamen_mov__movimiento_proyecto')
+    proyectos = Proyecto.objects.all()
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
 def proyecto_integrante(request):
@@ -27,15 +27,11 @@ def proyecto_integrante(request):
          
     if request.method == 'POST':
         try:
-
-
-
             #asigno el alumno a un nuevo registro de integrantes
             alumno = Alumno.objects.select_related('user').get(mu=request.POST.get("integrante-mu"))
 
             integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=True).first()
             if(integrante is not None):
-                 print(integrante)
                  integrante.alumno = alumno
                  integrante.proyecto = proyecto
                  integrante.alta_proyecto =datetime.now()
@@ -51,9 +47,7 @@ def proyecto_baja(request):
 
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
-    print(integrante)
     
-    #tiene asignado un proyecto entonces...
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
         if request.method == 'POST':
@@ -200,7 +194,6 @@ def proyecto_create(request):
                     proyecto_instance.tribunal_proyecto = Tribunal.objects.first()
                     proyecto_instance.save()
                     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=True).first()
-                    print(integrante)
                     integrante.alta_proyecto =datetime.now()
                     integrante.alumno = alumno
                     integrante.proyecto = proyecto_instance
@@ -233,14 +226,11 @@ def proyecto_create(request):
 
 def administrador_proyecto_alta(request):
 
-
     alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
-
     tribunales = Tribunal.objects.all()
     comisiones = Cstf.objects.all()
     docentes = Docente.objects.all()
     asesores = Asesor.objects.all()
-
 
     if request.method == 'POST':
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
@@ -279,8 +269,6 @@ def administrador_proyecto_alta(request):
 
 def administrador_proyecto_modificar(request):
 
-
-
     tribunales = Tribunal.objects.all()
     comisiones = Cstf.objects.all()
     docentes = Docente.objects.all()
@@ -317,8 +305,7 @@ def administrador_proyecto_modificar(request):
              return render(request, "administrador/proyecto/modificar.html", 
                            {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
 
-
-    else:    
+    else:   
         form_proyecto = ProyectoForm(prefix='form_proyecto')
 
     return render(request, "administrador/proyecto/modificar.html", 
@@ -348,27 +335,21 @@ def administrador_integrante_alumno(request):
              return render(request, "administrador/integrantes/alumno.html", 
                            {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
 
-
     else:    
         form_proyecto = ProyectoForm(prefix='form_proyecto')
 
     return render(request, "administrador/integrantes/alumno.html", 
                   {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
     
-
-
 def alumno(request):
-         alumnos = User.objects.get(id=1)
-         return render(request, "alumno/home.html",
-                  {'alumnos': alumnos})
+         return render(request, "alumno/home.html")
 
 def docente(request):
          return render(request, "docente/home.html")
 
 def cstf(request):
-         cstf = User.objects.get(id=1)
-         return render(request, "cstf/home.html",
-                  {'cstf': cstf})
+         return render(request, "cstf/home.html")
+
 def cstf_evaluacion(request):
         docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
         miembro = Miembro_Cstf.objects.filter(docente=docente.id).first()
@@ -390,9 +371,7 @@ def cstf_evaluacion(request):
         return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes})
 
 def tribunal(request):
-         tribunal = User.objects.get(id=1)
-         return render(request, "tribunal/home.html",
-                  {'tribunal': tribunal})
+         return render(request, "tribunal/home.html")
 
 def tribunal_evaluacion_ptf(request):
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
@@ -493,10 +472,13 @@ def tribunal_nuevo(request):
         try:
             tribunales = Tribunal.objects.all()
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None)
-            print(docentes.query)
             if request.method=='POST':
                 if 'agregar-tribunal' in request.POST:    
                     tribunal = Tribunal()
+                    tribunal.disposicion = datetime.now()
+                    tribunal.presidente = Docente.objects.filter(id=request.POST.get("director-id")).first()
+                    tribunal.save() 
+                    tribunal.nro_disposicion=tribunal.id
                     tribunal.save() 
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
             if request.method=='POST':
@@ -519,14 +501,10 @@ def tribunal_nuevo(request):
             return render(request, "administrador/tribunales/alta.html")
 
 def administrador(request):
-         administrador = User.objects.get(id=1)
-         return render(request, "administrador/home.html",
-                  {'administrador': administrador})
+         return render(request, "administrador/home.html")
 
 def administrador_estadisticas(request):
-         administrador = User.objects.get(id=1)
-         return render(request, "administrador/estadisticas/estadisticas.html",
-                  {'administrador': administrador})
+         return render(request, "administrador/estadisticas/estadisticas.html")
 
 def administrador_alumno_alta(request):
     if request.method == 'POST':

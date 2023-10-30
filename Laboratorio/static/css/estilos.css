@@ -116,6 +116,10 @@ table {
   .margin{
     margin: 100px;
   }
+
+  .margin2{
+    margin: 50px;
+  }
   
 /* Add a black background color to the top navigation */
 .topnav {
