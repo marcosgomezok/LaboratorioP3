@@ -1,0 +1,51 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Integrante Alumno{% endblock %}
+{% block child%}
+  <div class="container">
+      <div class="container-fluid">
+          <div class="centrar mb-3 mt-3 "><h3>Agrega Alumnos a un PTF</h3></div>
+          <form method="POST">
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Proyecto:</label>
+                <div class="col-sm-7">
+                    {% if editar is not null or blank %}
+                    <input class="form-control"name="proyecto-id-2"  id="proyecto-id-2" value="{{editar.id}}" hidden/>
+                    <label class="form-control">#{{editar.id}} {{editar.titulo}} </label>
+                    {%else%}
+                    <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
+                    {% for proyecto in proyectos %}
+                    <option value={{proyecto.id}}>#{{proyecto.id}} {{proyecto.titulo}} </option>
+                  {% endfor %}
+                    </select>
+                    {% csrf_token %}
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-2">
+                      <button type="submit" class="btn btn-success" name="buscar"{% if editar is not null or blank %}disabled{% endif %}>Buscar</button>
+                    </div>
+            </div>
+            
+            {% if editar is not null or blank %}
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Alumno:</label>
+                  <div class="col-sm-3">
+                      <select class="form-select"type="text" id="alumno-id" name="alumno-id" required/>
+                      <option disabled selected value> -- Selecciona Alumno -- </option>
+                      {% for alumno in alumnos %}
+                          <option value={{alumno.alumno.id}}>{{alumno.alumno.nombre}} {{alumno.alumno.apellido}}</option>
+                    {% endfor %}
+                      </select>
+                    </div>
+              </div>
+
+                <div class="centrar margin">
+                  {% csrf_token %}
+                  <a href="{% url 'gestion:administrador_integrante_alumno' %}" class="btn btn-danger">Cancelar</a>
+                  <button type="submit" class="btn btn-success" name="actualizar">Guardar</button>
+                </div>    
+            {% endif %}       
+                           
+          </form>
+              </div>
+      </div>
+{% endblock %}

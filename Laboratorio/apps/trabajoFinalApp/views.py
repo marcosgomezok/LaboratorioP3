@@ -82,6 +82,8 @@ def proyecto_entrega(request):
                 dictamen = Dictamen()
                 movimiento = Movimiento()
                 movimiento.tipo_mov = 'proyecto_presentado'
+                movimiento.fecha_mov =datetime.now()
+                movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                 movimiento.movimiento_proyecto=proyecto
                 movimiento.save()
                 dictamen.dictamen_mov=movimiento
@@ -93,6 +95,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_cstf'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -102,6 +106,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_tribunal'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -110,6 +116,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_cstf'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -119,6 +127,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_borrador'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -127,6 +137,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_tribunal'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -136,6 +148,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_final'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -144,6 +158,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_borrador'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -153,6 +169,8 @@ def proyecto_entrega(request):
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_final'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
                         movimiento.movimiento_proyecto=proyecto
                         movimiento.save()
                         dictamen.dictamen_mov=movimiento
@@ -305,6 +323,37 @@ def administrador_proyecto_modificar(request):
 
     return render(request, "administrador/proyecto/modificar.html", 
                   {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
+    
+
+def administrador_integrante_alumno(request):
+    
+    editar = None
+    alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
+    proyectos = Proyecto.objects.all()
+
+    if request.method == 'POST':
+        form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
+        editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id")).first()
+        if 'actualizar' in request.POST: 
+            
+                    editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id-2")).first()
+                    integrante = Integrante.objects.filter(alumno_id=request.POST.get("alumno-id"),alta_proyecto=None).first()
+                    integrante.proyecto = editar
+                    integrante.alta_proyecto =datetime.now()
+                    integrante.save()
+                    return redirect(reverse('gestion:administrador_integrante_alumno'))
+
+        if 'buscar' in request.POST:
+             
+             return render(request, "administrador/integrantes/alumno.html", 
+                           {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
+
+
+    else:    
+        form_proyecto = ProyectoForm(prefix='form_proyecto')
+
+    return render(request, "administrador/integrantes/alumno.html", 
+                  {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
     
 
 
