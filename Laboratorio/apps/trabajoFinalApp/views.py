@@ -17,24 +17,28 @@ def proyecto_lista(request):
 def proyecto_integrante(request):
     #obtengo el proyecto asignado al usuario logeado
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
-    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
+
+    #NO HAY un proyecto asignado al usuario:
     else:
         return redirect(reverse('gestion:proyecto_create'))
          
     if request.method == 'POST':
         try:
 
-            #asigno el proyecto a un nuevo registro de integrantes
-            integrante = Integrante()
-            integrante.proyecto = proyecto
+
 
             #asigno el alumno a un nuevo registro de integrantes
             alumno = Alumno.objects.select_related('user').get(mu=request.POST.get("integrante-mu"))
-            print(alumno.mu)
-            if(Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()== None):
+
+            integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=True).first()
+            if(integrante is not None):
+                 print(integrante)
                  integrante.alumno = alumno
+                 integrante.proyecto = proyecto
+                 integrante.alta_proyecto =datetime.now()
                  integrante.save()
             else:
                  messages.error(request, 'Error, Matricula Incorrecta')     
@@ -46,7 +50,10 @@ def proyecto_integrante(request):
 def proyecto_baja(request):
 
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
-    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
+    print(integrante)
+    
+    #tiene asignado un proyecto entonces...
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
         if request.method == 'POST':
@@ -54,7 +61,6 @@ def proyecto_baja(request):
             integrante.save()
             new = Integrante()
             new.alumno=alumno
-            new.proyecto=proyecto
             new.save()
             return render(request, 'alumno/home.html')
         return render(request, 'alumno/baja.html', {
@@ -66,7 +72,7 @@ def proyecto_baja(request):
 def proyecto_entrega(request):
 
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
-    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None).first()
+    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
         dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).last()
@@ -175,7 +181,8 @@ def proyecto_create(request):
                     proyecto_instance.cstf_proyecto = Cstf.objects.first()
                     proyecto_instance.tribunal_proyecto = Tribunal.objects.first()
                     proyecto_instance.save()
-                    integrante = Integrante()
+                    integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=True).first()
+                    print(integrante)
                     integrante.alta_proyecto =datetime.now()
                     integrante.alumno = alumno
                     integrante.proyecto = proyecto_instance
@@ -194,7 +201,7 @@ def proyecto_create(request):
         form_integrante = AlumnoForm(prefix='form_integrante')
     try:
         alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
-        integrante = Integrante.objects.get(alumno_id=alumno.id,baja_proyecto=None)
+        integrante = Integrante.objects.get(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False)
         proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
         return render(request, 'alumno/estado.html', {
             'proyecto': proyecto,
