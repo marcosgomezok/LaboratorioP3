@@ -25,4 +25,5 @@ urlpatterns = [
     path('administrador/cstf/nuevo', views.registro_cstf, name='registro_cstf'),
     path('administrador/tribunal/nuevo', views.tribunal_nuevo, name='tribunal_nuevo'),
     path('administrador/proyecto/nuevo', views.administrador_proyecto_alta, name='administrador_proyecto_alta'),
+    path('administrador/proyecto/modificar', views.administrador_proyecto_modificar, name='administrador_proyecto_modificar'),
 ]

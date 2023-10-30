@@ -1,0 +1,137 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Crear PTF{% endblock %}
+{% block child%}
+  <div class="container">
+      <div class="container-fluid">
+          <div class="centrar mb-3 mt-3 "><h3>Actualiza un Proyecto de Trabajo Final.</h3></div>
+          <form method="POST">
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Proyecto:</label>
+                <div class="col-sm-7">
+                    {% if editar is not null or blank %}
+                    <input class="form-control"name="proyecto-id-2"  id="proyecto-id-2" value="{{editar.id}}" hidden/>
+                    <label class="form-control">#{{editar.id}} {{editar.titulo}} </label>
+                    {%else%}
+                    <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
+                    {% for proyecto in proyectos %}
+                    <option value={{proyecto.id}}>#{{proyecto.id}} {{proyecto.titulo}} </option>
+                  {% endfor %}
+                    </select>
+                    {% csrf_token %}
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-2">
+                      <button type="submit" class="btn btn-success" name="buscar"{% if editar is not null or blank %}disabled{% endif %}>Buscar</button>
+                    </div>
+            </div>
+            {% if editar is not null or blank %}
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Título</label>
+                <div class="col-sm-11">
+                    <input class="form-control" name="form_proyecto-titulo"  id="form_proyecto-titulo" value="{{editar.titulo}}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Descripción</label>
+                <div class="col-sm-11"> 
+                    <input class="form-control" name="form_proyecto-descripcion"  id="form_proyecto-descripcion" value="{{editar.descripcion}}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Fecha inicio</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="date" name="form_proyecto-presentacion_ptf"  id="form_proyecto-presentacion_ptf" value="{{editar.presentacion_ptf|date:'Y-m-d'}}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Adjuntos</label>
+                <div class="col-sm-11">
+                  <input type="file" class="form-control" id="adjuntos">
+                </div>
+            </div> 
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Tribunal</label>
+                <div class="col-sm-3">
+                    <select class="form-select"type="text" id="tribunal-id" name="tribunal-id"/>
+                    {% for tribunal in tribunales %}
+                        {% if tribunal.id == editar.tribunal_proyecto_id %}
+                        <option value={{tribunal.id}} selected>Tribunal {{tribunal.id}}</option>
+                        {%else%}
+                        <option value={{tribunal.id}}>Tribunal {{tribunal.id}}</option>
+                        {% endif %}  
+
+
+                  {% endfor %}
+                    </select>
+                  </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Comisiones</label>
+                <div class="col-sm-3">
+                    <select class="form-select"type="text" id="comision-id" name="comision-id"/>
+                    {% for comision in comisiones %}
+
+                        {% if comision.id == editar.cstf_proyecto_id %}
+                        <option value={{comision.id}} selected>Comision {{comision.id}}</option>
+                        {%else%}
+                        <option value={{comision.id}}>Comision {{comision.id}}</option>
+                        {% endif %}  
+                       
+
+                  {% endfor %}
+                    </select>
+                  </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Director</label>
+                <div class="col-sm-3">
+                    <select class="form-select"type="text" id="director-id" name="director-id"/>
+                    {% for docente in docentes %}
+                        {% if docente.id == editar.director_id %}
+                        <option value={{docente.id}} selected>{{docente.nombre}} {{docente.apellido}}</option>
+                        {%else%}
+                        <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
+                        {% endif %}  
+
+                  {% endfor %}
+                    </select>
+                  </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Co-Director</label>
+                <div class="col-sm-3">
+                    <select class="form-select"type="text" id="co-director-id" name="co-director-id"/>
+                    {% for docente in docentes %}
+                        {% if docente.id == editar.co_director_id %}
+                        <option value={{docente.id}} selected>{{docente.nombre}} {{docente.apellido}}</option>
+                        {%else%}
+                        <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
+                        {% endif %}  
+                  {% endfor %}
+                    </select>
+                  </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label">Asesor</label>
+                <div class="col-sm-3">
+                    <select class="form-select"type="text" id="asesor-id" name="asesor-id"/>
+                    {% for asesor in asesores %}
+                        {% if asesor.id == editar.asesor_id %}
+                        <option value={{asesor.id}} selected>{{asesor.nombre}} {{asesor.apellido}}</option>
+                        {%else%}
+                        <option value={{asesor.id}}>{{asesor.nombre}} {{asesor.apellido}}</option>
+                        {% endif %} 
+                  {% endfor %}
+                    </select>
+                  </div>
+            </div>
+                <div class="centrar margin">
+                  {% csrf_token %}
+                  <a href="{% url 'gestion:administrador_proyecto_modificar' %}" class="btn btn-danger">Cancelar</a>
+                  <button type="submit" class="btn btn-success" name="actualizar">Guardar</button>
+                </div>    
+            {% endif %}                                   
+          </form>
+              </div>
+      </div>
+{% endblock %}

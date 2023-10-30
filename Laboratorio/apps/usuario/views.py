@@ -25,8 +25,10 @@ def index(request):
             return HttpResponseRedirect(reverse('gestion:docente'))
         if(request.user.is_superuser):
             return HttpResponseRedirect(reverse('gestion:administrador'))
+        
+        return HttpResponseRedirect(reverse("usuarios:login"))
     except User.DoesNotExist:
-        return None
+        return HttpResponseRedirect(reverse("usuarios:login"))
 
 
 def login_view(request):

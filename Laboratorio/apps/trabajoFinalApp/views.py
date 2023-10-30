@@ -216,7 +216,6 @@ def administrador_proyecto_alta(request):
     docentes = Docente.objects.all()
     asesores = Asesor.objects.all()
 
-    print(alumnos.query)
 
     if request.method == 'POST':
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
@@ -252,6 +251,53 @@ def administrador_proyecto_alta(request):
 
     return render(request, "administrador/proyecto/alta.html", 
                   {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'alumnos':alumnos,'docentes':docentes,'asesores':asesores})
+
+def administrador_proyecto_modificar(request):
+
+
+
+    tribunales = Tribunal.objects.all()
+    comisiones = Cstf.objects.all()
+    docentes = Docente.objects.all()
+    asesores = Asesor.objects.all()
+    proyectos = Proyecto.objects.all()
+    editar = None
+
+    if request.method == 'POST':
+        form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
+        editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id")).first()
+        if 'actualizar' in request.POST: 
+            if form_proyecto.is_valid():
+                        editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id-2")).first()
+                        tribunal = Tribunal.objects.get(id=request.POST.get("tribunal-id"))
+                        comision = Cstf.objects.get(id=request.POST.get("comision-id"))
+                        asesor = Asesor.objects.get(id=request.POST.get("asesor-id"))
+                        director = Docente.objects.get(id=request.POST.get("director-id"))
+                        codirector = Docente.objects.get(id=request.POST.get("co-director-id"))
+                        editar.cstf_proyecto = comision
+                        editar.tribunal_proyecto = tribunal
+                        editar.director = director
+                        editar.co_director = codirector
+                        editar.asesor = asesor
+                        temp = form_proyecto.save(commit=False)
+                        editar.titulo= temp.titulo
+                        editar.descripcion= temp.descripcion
+                        editar.presentacion_ptf= temp.presentacion_ptf
+                        editar.save()
+                        return redirect(reverse('gestion:administrador_proyecto_modificar'))
+            else:
+                form_proyecto = ProyectoForm(prefix='form_proyecto')
+        if 'buscar' in request.POST:
+             
+             return render(request, "administrador/proyecto/modificar.html", 
+                           {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
+
+
+    else:    
+        form_proyecto = ProyectoForm(prefix='form_proyecto')
+
+    return render(request, "administrador/proyecto/modificar.html", 
+                  {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
     
 
 
