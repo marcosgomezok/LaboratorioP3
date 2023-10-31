@@ -204,6 +204,18 @@ def proyecto_create(request):
                     integrante.alumno = alumno
                     integrante.proyecto = proyecto_instance
                     integrante.save()
+
+                    dictamen = Dictamen()
+                    movimiento = Movimiento()
+                    movimiento.tipo_mov = 'proyecto_presentado'
+                    movimiento.fecha_mov =datetime.now()
+                    movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                    movimiento.movimiento_proyecto=proyecto_instance
+                    movimiento.save()
+                    dictamen.dictamen_mov=movimiento
+                    dictamen.resultado_dictamen='aceptado'
+                    dictamen.save()
+
                     messages.success(request, 'Se ha agregado exitosamente el proyecto')
                     return redirect(reverse('gestion:proyecto_create'))
             else:
@@ -255,6 +267,17 @@ def administrador_proyecto_alta(request):
                     proyecto_instance.co_director = codirector
                     proyecto_instance.asesor = asesor
                     proyecto_instance.save()
+
+                    dictamen = Dictamen()
+                    movimiento = Movimiento()
+                    movimiento.tipo_mov = 'proyecto_presentado'
+                    movimiento.fecha_mov =datetime.now()
+                    movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                    movimiento.movimiento_proyecto=proyecto_instance
+                    movimiento.save()
+                    dictamen.dictamen_mov=movimiento
+                    dictamen.resultado_dictamen='aceptado'
+                    dictamen.save()
 
                     new=RegistroDirector()
                     new.proyecto=proyecto_instance
