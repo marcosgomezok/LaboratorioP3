@@ -585,7 +585,6 @@ def movimientos(request):
             if dictamen is None:
                 final = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id-2"),dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen='aceptado').last()
                 if( final is None):
-                    print("entro aca?")
                     dictamen = Dictamen()
                     movimiento = Movimiento()
                     movimiento.tipo_mov = 'proyecto_presentado'
@@ -596,7 +595,6 @@ def movimientos(request):
                     dictamen.dictamen_mov=movimiento
                     dictamen.save()
                 else:
-                    print("estoy entrando aca")
                     return render(request, "administrador/movimientos/nuevo.html", 
                            {'proyectos':proyectos,'editar':editar,'dictamen':final})
             else:
@@ -708,7 +706,6 @@ def movimientos(request):
              dictamen = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id"),resultado_dictamen=None).last()
              if(dictamen is None):
                 dictamen = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id"),dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen='aceptado').last()
-             print(dictamen)
              return render(request, "administrador/movimientos/nuevo.html", 
                            {'proyectos':proyectos,'editar':editar,'dictamen':dictamen})
 
