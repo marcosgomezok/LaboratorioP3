@@ -85,7 +85,8 @@ def proyecto_entrega(request):
                 dictamen.save()
             else:
                 if(dictamen.dictamen_mov.tipo_mov == 'proyecto_presentado'):
-                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen.resultado_dictamen == 'aceptado'
+                        dictamen.save()
                         dictamen = Dictamen()
                         movimiento = Movimiento()
                         movimiento.tipo_mov = 'evaluacion_cstf'
@@ -214,6 +215,12 @@ def proyecto_create(request):
                     movimiento.save()
                     dictamen.dictamen_mov=movimiento
                     dictamen.save()
+
+                    new=RegistroDirector()
+                    new.proyecto=proyecto_instance
+                    new.director = director
+                    new.alta_proyecto = datetime.now()
+                    new.save() 
 
                     messages.success(request, 'Se ha agregado exitosamente el proyecto')
                     return redirect(reverse('gestion:proyecto_create'))
