@@ -6,35 +6,27 @@
         <div class="centrar mb-3 mt-3 "><h3>Tu Proyecto de Trabajo Final.</h3></div>
         <form method="POST">
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Título</label>
-              <div class="col-sm-11">
+            <label class="col-sm-2 col-form-label">Título:</label>
+              <div class="col-sm-10">
                 <label class="col-form-label">{{proyecto.titulo}}</label>
               </div>
           </div>
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Descripción</label>
-              <div class="col-sm-11"> 
+            <label class="col-sm-2 col-form-label">Descripción:</label>
+              <div class="col-sm-10"> 
                 <label class="col-form-label">{{proyecto.descripcion}}</label>
               </div>
           </div>
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Fecha inicio</label>
-              <div class="col-sm-11">
-                <label class="col-form-label">{{proyecto.presentacion_ptf}}</label>
+            <label class="col-sm-2 col-form-label">Fecha inicio:</label>
+              <div class="col-sm-10">
+                <label class="col-form-label">{{proyecto.presentacion_ptf|date:"d-m-Y"}}</label>
               </div>
           </div>
-          <div class="form-group row">
-              <label class="col-sm-1 col-form-label">Adjuntos</label>
-              <div class="col-sm-11">
-                  <div class="col-form-label">
-                      
-                      <a  href="#" download="archivo.html">Descargar</a>
-                    </div>
-                </div>
-            </div>  
+
             <div class="form-group row">
-              <label class="col-sm-1 col-form-label">Movimiento:</label>
-                <div class="col-sm-11">
+              <label class="col-sm-2 col-form-label">Movimiento:</label>
+                <div class="col-sm-10">
                     {% if dictamen.dictamen_mov.tipo_mov is null or blank %}
                     <label class="col-form-label">Inicio</label>
                   {% else %}
@@ -43,8 +35,8 @@
                 </div>
             </div>
             <div class="form-group row">
-              <label class="col-sm-1 col-form-label">Estado:</label>
-                <div class="col-sm-11">
+              <label class="col-sm-2 col-form-label">Estado:</label>
+                <div class="col-sm-10">
                     {% if dictamen.resultado_dictamen is null or blank %}
                     <label class="col-form-label">Pendiente</label>
                   {% else %}
@@ -52,6 +44,15 @@
                   {% endif %}
                 </div>
             </div>
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Adjuntos:</label>
+              <div class="col-sm-10">
+                  <div class="col-form-label">
+                      
+                      <a  href="#" download="archivo.html">Descargar</a>
+                    </div>
+                </div>
+            </div>  
           <div class="centrar margin">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">Enviar a Evaluación</button>
