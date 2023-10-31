@@ -213,7 +213,6 @@ def proyecto_create(request):
                     movimiento.movimiento_proyecto=proyecto_instance
                     movimiento.save()
                     dictamen.dictamen_mov=movimiento
-                    dictamen.resultado_dictamen='aceptado'
                     dictamen.save()
 
                     messages.success(request, 'Se ha agregado exitosamente el proyecto')
@@ -276,7 +275,6 @@ def administrador_proyecto_alta(request):
                     movimiento.movimiento_proyecto=proyecto_instance
                     movimiento.save()
                     dictamen.dictamen_mov=movimiento
-                    dictamen.resultado_dictamen='aceptado'
                     dictamen.save()
 
                     new=RegistroDirector()
