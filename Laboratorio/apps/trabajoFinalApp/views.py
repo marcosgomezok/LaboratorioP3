@@ -192,6 +192,12 @@ def proyecto_create(request):
                     proyecto_instance = form_proyecto.save()
                     proyecto_instance.cstf_proyecto = Cstf.objects.first()
                     proyecto_instance.tribunal_proyecto = Tribunal.objects.first()
+                    asesor = Asesor.objects.last()
+                    director = Docente.objects.first()
+                    codirector = Docente.objects.last()
+                    proyecto_instance.director = director
+                    proyecto_instance.co_director = codirector
+                    proyecto_instance.asesor = asesor
                     proyecto_instance.save()
                     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=True).first()
                     integrante.alta_proyecto =datetime.now()
@@ -430,7 +436,11 @@ def tribunal_evaluacion_ptf(request):
             dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_mt,dictamen_mov__tipo_mov='evaluacion_tribunal',resultado_dictamen=None)
          else:  
             miembro = Miembro_Suplente.objects.filter(vocal_suplente=docente.id).first()
-            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_tribunal',resultado_dictamen=None)
+            if(miembro is not None):
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_tribunal',resultado_dictamen=None)
+            else:     
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto__presidente=docente.id,dictamen_mov__tipo_mov='evaluacion_tribunal',resultado_dictamen=None)
+         
          if request.method == 'POST':   
             editar = dictamenes.filter(id=request.POST.get("proyecto-id")).first()
 
@@ -454,7 +464,11 @@ def tribunal_evaluacion_borrador(request):
             dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_mt,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
          else:  
             miembro = Miembro_Suplente.objects.filter(vocal_suplente=docente.id).first()
-            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
+            if(miembro is not None):
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
+            else:     
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto__presidente=docente.id,dictamen_mov__tipo_mov='evaluacion_borrador',resultado_dictamen=None)
+         
          if request.method == 'POST':   
             editar = dictamenes.filter(id=request.POST.get("proyecto-id")).first()
 
@@ -478,7 +492,11 @@ def tribunal_evaluacion_final(request):
             dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_mt,dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen=None)
          else:  
             miembro = Miembro_Suplente.objects.filter(vocal_suplente=docente.id).first()
-            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen=None)
+            if(miembro is not None):
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto=miembro.tribunal_ms,dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen=None)
+            else:     
+                dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__tribunal_proyecto__presidente=docente.id,dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen=None)
+         
          if request.method == 'POST':   
             editar = dictamenes.filter(id=request.POST.get("proyecto-id")).first()
 
@@ -498,7 +516,7 @@ def tribunal_evaluacion_final(request):
 def registro_cstf(request):
         try:
             comisiones = Cstf.objects.all()
-            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None)
+            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
             if request.method=='POST':
                 if 'agregar-comision' in request.POST:    
                     cstf = Cstf(fecha_creacion=datetime.now())
@@ -521,15 +539,18 @@ def registro_cstf(request):
 def tribunal_nuevo(request):
         try:
             tribunales = Tribunal.objects.all()
-            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None)
+            docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
             if request.method=='POST':
                 if 'agregar-tribunal' in request.POST:    
                     tribunal = Tribunal()
                     tribunal.disposicion = datetime.now()
-                    tribunal.presidente = Docente.objects.filter(id=request.POST.get("director-id")).first()
+                    docente = Docente.objects.filter(id=request.POST.get("director-id")).first()
+                    tribunal.presidente = docente
                     tribunal.save() 
                     tribunal.nro_disposicion=tribunal.id
                     tribunal.save() 
+                    group = Group.objects.get(name='Tribunal')
+                    docente.user.groups.add(group)
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
             if request.method=='POST':
                 if 'agregar-miembro' in request.POST: 
@@ -549,6 +570,152 @@ def tribunal_nuevo(request):
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
         except Tribunal.DoesNotExist:
             return render(request, "administrador/tribunales/alta.html")
+
+def movimientos(request):
+             
+    editar = None
+    proyectos = Proyecto.objects.all()
+
+    if request.method == 'POST':
+        editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id")).first()
+        if 'actualizar' in request.POST: 
+            dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto')
+            dictamen = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id-2"),resultado_dictamen=None).last()
+            editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id-2")).first()
+            if dictamen is None:
+                final = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id-2"),dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen='aceptado').last()
+                if( final is None):
+                    print("entro aca?")
+                    dictamen = Dictamen()
+                    movimiento = Movimiento()
+                    movimiento.tipo_mov = 'proyecto_presentado'
+                    movimiento.fecha_mov =datetime.now()
+                    movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                    movimiento.movimiento_proyecto=editar
+                    movimiento.save()
+                    dictamen.dictamen_mov=movimiento
+                    dictamen.save()
+                else:
+                    print("estoy entrando aca")
+                    return render(request, "administrador/movimientos/nuevo.html", 
+                           {'proyectos':proyectos,'editar':editar,'dictamen':final})
+            else:
+                dictamen.resultado_dictamen = request.POST.get("resultado_dictamen")
+                dictamen.observacion = request.POST.get("observacion")
+                dictamen.save()
+
+
+                if(dictamen.dictamen_mov.tipo_mov == 'proyecto_presentado'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_cstf'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()     
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'proyecto_presentado'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_cstf'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_tribunal'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_cstf'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_tribunal'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_borrador'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_tribunal'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_borrador'):
+                    if(dictamen.resultado_dictamen == 'aceptado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_final'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_borrador'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
+                if(dictamen.dictamen_mov.tipo_mov == 'evaluacion_final'):
+                    if(dictamen.resultado_dictamen == 'rechazado' or dictamen.resultado_dictamen == 'observado'):
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'evaluacion_final'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=editar
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()                          
+            return render(request, "administrador/movimientos/nuevo.html", 
+                           {'proyectos':proyectos,'editar':editar,'dictamen':dictamen})
+
+        if 'buscar' in request.POST:
+             dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto')
+             dictamen = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id"),resultado_dictamen=None).last()
+             if(dictamen is None):
+                dictamen = dictamenes.filter(dictamen_mov__movimiento_proyecto__id=request.POST.get("proyecto-id"),dictamen_mov__tipo_mov='evaluacion_final',resultado_dictamen='aceptado').last()
+             print(dictamen)
+             return render(request, "administrador/movimientos/nuevo.html", 
+                           {'proyectos':proyectos,'editar':editar,'dictamen':dictamen})
+
+
+    return render(request, "administrador/movimientos/nuevo.html", 
+                  {'proyectos':proyectos,'editar':editar})
+
 
 def administrador(request):
          return render(request, "administrador/home.html")

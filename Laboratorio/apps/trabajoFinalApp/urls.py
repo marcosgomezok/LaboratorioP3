@@ -28,4 +28,5 @@ urlpatterns = [
     path('administrador/proyecto/modificar', views.administrador_proyecto_modificar, name='administrador_proyecto_modificar'),
     path('administrador/integrante/alumno', views.administrador_integrante_alumno, name='administrador_integrante_alumno'),
     path('administrador/integrante/director', views.director_cambio, name='director_cambio'),
+    path('administrador/movimiento/nuevo', views.movimientos, name='movimientos'),
 ]

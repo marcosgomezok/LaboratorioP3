@@ -41,3 +41,6 @@ class CstfAdmin(admin.ModelAdmin):
 @admin.register(RegistroDirector)
 class RegistroDirectorAdmin(admin.ModelAdmin):
     list_display = ("id","alta_proyecto")
+@admin.register(Tribunal)
+class TribunalAdmin(admin.ModelAdmin):
+    list_display = ("id","disposicion")

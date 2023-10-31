@@ -1,0 +1,104 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Administrador{% endblock %}
+{% block child%}
+  <div class="container">
+      <div class="container-fluid">
+          <div class="centrar mb-3 mt-3 "><h3>Evaluar un Trabajo Final.</h3></div>
+          <form method="POST">
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label">Proyecto:</label>
+                <div class="col-sm-4">
+                    {% if editar is not null or blank %}
+                    <input class="form-control"name="proyecto-id-2"  id="proyecto-id-2" value="{{editar.id}}" hidden/>
+                    <label class="form-control">#{{editar.id}} {{editar.titulo}} </label>
+                    {%else%}
+                    <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
+                    {% for proyecto in proyectos %}
+                        {% if proyecto.id == editar.id %}
+                        <option value={{proyecto.id}} selected>#{{proyecto.id}} {{proyecto.titulo}} </option>
+                        {%else%}
+                        <option value={{proyecto.id}}>#{{proyecto.id}} {{proyecto.titulo}} </option>
+                        {% endif %}  
+
+
+                  {% endfor %}
+                    </select>
+                    {% csrf_token %}
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-2">
+                      <button type="submit" class="btn btn-success" name="buscar"{% if editar is not null or blank %}disabled{% endif %}>Buscar</button>
+                    </div>
+            </div>
+            {% if editar is not null or blank %}
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label">Etapa:</label>
+                  <div class="col-sm-4">
+                      {% if dictamen.dictamen_mov.tipo_mov is null or blank %}
+                      <label class="col-form-label">Inicio</label>
+                    {% else %}
+                      <label class="col-form-label">{{dictamen.dictamen_mov.get_tipo_mov_display}}</label>
+                    {% endif %}
+                  </div>
+              </div>
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                  <label class="col-sm-2 col-form-label">Estado:</label>
+                  <div class="col-sm-4">
+
+                    {% if dictamen.id is null or blank %}
+                    <label class="col-form-label"id="estado{{dictamen.id}}">Pendiente</label>
+                    {% else %}
+
+                        {% if dictamen.dictamen_mov.tipo_mov == "evaluacion_final" and dictamen.resultado_dictamen == "aceptado"%}
+                        <label class="col-form-label"id="estado{{dictamen.id}}">Aceptado</label>
+                        {% else %}
+                        <select class="form-select"type="text" id="resultado_dictamen" name="resultado_dictamen" required/>
+                        <option disabled selected value> -- Selecciona Resultado -- </option>
+                        <option value=aceptado>Aceptado</option>
+                        <option value=rechazado>Rechazado</option>
+                        <option value=observado>Observado</option>
+                        </select>
+                        {% endif %}
+                    {% endif %}
+                    </div>
+    
+
+              </div>
+              {% if dictamen.dictamen_mov.tipo_mov == "evaluacion_final" and dictamen.resultado_dictamen == "aceptado" or dictamen.id is null or blank%}
+              {% else %}
+              <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label">Observación</label>
+                  <div class="col-sm-4"> 
+                    <textarea type="text" class="form-control" id="observacion" name="observacion"></textarea>
+                  </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label">Informe</label>
+                  <div class="col-sm-4">
+                    <input type="file" class="form-control" id="adjuntos" >
+                  </div>
+              </div> 
+              {% endif %} 
+
+                <div class="centrar margin">
+                  {% csrf_token %}
+                  <a href="{% url 'gestion:movimientos' %}" class="btn btn-danger">Volver</a>
+                  {% if dictamen.dictamen_mov.tipo_mov == "evaluacion_final" and dictamen.resultado_dictamen == "aceptado"%}
+                  {% else %}
+                        {% if dictamen.dictamen_mov.tipo_mov is null or blank %}
+                        <button type="submit" class="btn btn-success" name="actualizar">Iniciar</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-success" name="actualizar">Evaluar</button>
+                        {% endif %}
+                  {% endif %} 
+                </div>    
+            {% endif %}                                   
+          </form>
+              </div>
+      </div>
+{% endblock %}

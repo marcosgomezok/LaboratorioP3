@@ -14,7 +14,7 @@ class Tribunal(models.Model):
     disposicion = models.DateField(null=True, blank=True)
     nro_disposicion = models.CharField(null=True, blank=True)
     archivo_tribunal = models.FileField(null=True)
-    presidente = models.OneToOneField(Docente, on_delete=models.SET_NULL,null=True, blank=True)
+    presidente = models.OneToOneField(Docente, on_delete=models.SET_NULL,null=True, blank=True,related_name='presidente')
 
 class Miembro_Titular(models.Model):
     tribunal_mt = models.ForeignKey(Tribunal, on_delete=models.CASCADE,null=True, blank=True,related_name='tribunal_mt')
