@@ -8,13 +8,13 @@ class Persona(models.Model):
     apellido = models.CharField(max_length=200)
 
 class Docente(Persona):
-    cuil = models.CharField(max_length=200,unique=True,null=True)
+    cuil = models.CharField(max_length=200,null=True)
 
 class Alumno(Persona):
     dni = models.CharField(max_length=8,null=True)
-    mu = models.CharField(max_length=200,unique=True,null=True)
+    mu = models.CharField(max_length=200,null=True)
     analitico = models.FileField(null=True)
 
 class Asesor(Persona):
-    cuil = models.CharField(max_length=200,unique=True,null=True)
+    cuil = models.CharField(max_length=200,null=True)
     cv_asesor = models.FileField(null=True)

@@ -7,9 +7,27 @@
         <form method="POST">
           <div class="form-group row">
             <div class="col-sm-3"></div>
+            <label class="col-sm-2 col-form-label">Tribunal:</label>
+              <div class="col-sm-4">
+                  <select class="form-select"type="text" id="tribunal-id" name="tribunal-id" onchange="this.form.submit()" required/>
+                  {% if selected.id is null or blank%}
+                  <option disabled selected value> -- Selecciona Tribunal -- </option>
+                  {% endif %}
+                  {% for tribunal in tribunales %}
+                  {% if tribunal.id == selected.id %}
+                      <option value={{selected.id}} selected>Tribunal {{tribunal.id}}</option>
+                    {% else %}
+                        <option value={{tribunal.id}}>Tribunal {{tribunal.id}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+          </div>  
+          <div class="form-group row">
+            <div class="col-sm-3"></div>
             <label class="col-sm-2 col-form-label">Docente:</label>
               <div class="col-sm-4">
-                  <select class="form-select"type="text" id="docente-id" name="docente-id"/>
+                  <select class="form-select"type="text" id="docente-id" name="docente-id" required/>
                   {% for docente in docentes %}
                   <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
                 {% endfor %}
@@ -20,27 +38,19 @@
             <div class="col-sm-3"></div>
             <label class="col-sm-2 col-form-label">Rol:</label>
               <div class="col-sm-2 mt-2">
-
+                {% if titulares < 2 %}
                 <input type="radio" id="id_form_docente-rol1" name="form_docente-rol" value="titular" required checked/>
                 <label for="contactChoice1">Titular</label>
+              {% endif %}
 
+              {% if suplentes < 2 %}
                 <input type="radio" id="id_form_docente-rol2" name="form_docente-rol" value="suplente" />
                 <label for="contactChoice2">Suplente</label>
-
+                {% endif %}
 
               </div>
           </div>
-          <div class="form-group row">
-            <div class="col-sm-3"></div>
-            <label class="col-sm-2 col-form-label">Tribunal:</label>
-              <div class="col-sm-4">
-                  <select class="form-select"type="text" id="tribunal-id" name="tribunal-id"/>
-                  {% for tribunal in tribunales %}
-                    <option value={{tribunal.id}}>Tribunal {{tribunal.id}}</option>
-                  {% endfor %}
-                  </select>
-                </div>
-          </div>  
+
           <div class="centrar margin2">
             <button type="submit" class="btn btn-success" name="agregar-miembro">Guardar</button>
           </div>      
@@ -50,7 +60,7 @@
                   <div class="col-sm-3"></div>
                   <label class="col-sm-2 col-form-label">Presidente:</label>
                     <div class="col-sm-3">
-                        <select class="form-select"type="text" id="director-id" name="director-id"/>
+                        <select class="form-select"type="text" id="director-id" name="director-id" required/>
                         {% for docente in docentes %}
                         <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
                       {% endfor %}

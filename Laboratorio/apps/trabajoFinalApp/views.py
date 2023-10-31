@@ -581,6 +581,10 @@ def tribunal_nuevo(request):
                     docente.user.groups.add(group)
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
             if request.method=='POST':
+                titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()
+                suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()
+                selected = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
+                print(selected)
                 if 'agregar-miembro' in request.POST: 
                     docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
                     tribunal = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
@@ -595,6 +599,8 @@ def tribunal_nuevo(request):
                     miembro.save()
                     group = Group.objects.get(name='Tribunal')
                     docente.user.groups.add(group)
+                    return redirect(reverse('gestion:tribunal_nuevo'))
+                return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes})    
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
         except Tribunal.DoesNotExist:
             return render(request, "administrador/tribunales/alta.html")

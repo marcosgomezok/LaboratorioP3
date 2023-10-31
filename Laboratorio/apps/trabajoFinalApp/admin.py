@@ -44,3 +44,6 @@ class RegistroDirectorAdmin(admin.ModelAdmin):
 @admin.register(Tribunal)
 class TribunalAdmin(admin.ModelAdmin):
     list_display = ("id","disposicion")
+@admin.register(Miembro_Suplente)
+class Miembro_SuplenteAdmin(admin.ModelAdmin):
+    list_display = ("id","vocal_suplente_id")
