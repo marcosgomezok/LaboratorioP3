@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf,Tribunal,Miembro_Titular,Miembro_Suplente
+from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf,Tribunal,Miembro_Titular,Miembro_Suplente,RegistroDirector
 from apps.persona.models import Alumno,Docente,Asesor
 from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,AsesorForm,UserForm
 from django.contrib.auth.models import Group
@@ -249,6 +249,13 @@ def administrador_proyecto_alta(request):
                     proyecto_instance.co_director = codirector
                     proyecto_instance.asesor = asesor
                     proyecto_instance.save()
+
+                    new=RegistroDirector()
+                    new.proyecto=proyecto_instance
+                    new.director = director
+                    new.alta_proyecto = datetime.now()
+                    new.save()    
+
                     integrante_temp = Integrante.objects.select_related('alumno').filter(alumno__id=alumno.id,alta_proyecto=None).first()
                     integrante = Integrante.objects.get(id=integrante_temp.id)
 
@@ -289,9 +296,20 @@ def administrador_proyecto_modificar(request):
                         codirector = Docente.objects.get(id=request.POST.get("co-director-id"))
                         editar.cstf_proyecto = comision
                         editar.tribunal_proyecto = tribunal
-                        editar.director = director
                         editar.co_director = codirector
                         editar.asesor = asesor
+
+                        if editar.director != director:
+                            old=RegistroDirector.objects.filter(baja_proyecto=None,proyecto_id=editar.id).first()
+                            old.baja_proyecto = datetime.now()
+                            old.save()
+                            editar.director = director
+                            new=RegistroDirector()
+                            new.director = director
+                            new.alta_proyecto = datetime.now()
+                            new.proyecto=editar
+                            new.save()
+
                         temp = form_proyecto.save(commit=False)
                         editar.titulo= temp.titulo
                         editar.descripcion= temp.descripcion
@@ -311,6 +329,38 @@ def administrador_proyecto_modificar(request):
     return render(request, "administrador/proyecto/modificar.html", 
                   {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
     
+def director_cambio(request):
+
+    proyectos = Proyecto.objects.all()
+    docentes = Docente.objects.all()
+    editar = None
+
+    if request.method == 'POST':
+        editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id")).first()
+        if 'actualizar' in request.POST: 
+
+            editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id-2")).first()
+            director = Docente.objects.get(id=request.POST.get("director-id"))
+            if editar.director != director:
+                old=RegistroDirector.objects.filter(baja_proyecto=None,proyecto_id=editar.id).first()
+                old.baja_proyecto = datetime.now()
+                old.save()
+                editar.director = director
+                new=RegistroDirector()
+                new.director = director
+                new.alta_proyecto = datetime.now()
+                new.proyecto=editar
+                new.save()
+                editar.save()
+            return redirect(reverse('gestion:director_cambio'))
+
+        if 'buscar' in request.POST:
+             
+             return render(request, "administrador/integrantes/director.html", 
+                           {'proyectos':proyectos,'editar':editar,'docentes':docentes})
+
+    return render(request, "administrador/integrantes/director.html", 
+                  {'proyectos':proyectos,'editar':editar,'docentes':docentes})
 
 def administrador_integrante_alumno(request):
     

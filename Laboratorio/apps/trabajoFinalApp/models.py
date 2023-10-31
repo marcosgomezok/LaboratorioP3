@@ -38,8 +38,8 @@ class Proyecto(models.Model):
 class RegistroDirector(models.Model):
     alta_proyecto = models.DateField(null=True, blank=True)
     baja_proyecto = models.DateField(null=True, blank=True)
-    director = models.OneToOneField(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='director_registro')
-    proyecto = models.OneToOneField(Proyecto, on_delete=models.CASCADE,null=True, blank=True,related_name='director_proyecto')
+    director = models.ForeignKey(Docente, on_delete=models.CASCADE,null=True, blank=True,related_name='director_registro')
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null=True, blank=True,related_name='director_proyecto')
 
 class Integrante(models.Model):
     alta_proyecto = models.DateField(null=True, blank=True)

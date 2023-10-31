@@ -32,6 +32,12 @@ select{
   margin: 4px;
   padding: 4px;
 }
+textarea{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 4px;
+  padding: 4px;
+}
   
 div#logo img{
   width: 1349px; 
@@ -120,7 +126,25 @@ table {
   .margin2{
     margin: 50px;
   }
-  
+
+  .col-form-label{
+    padding-right: 1px;
+    padding-left: 0px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom:4px;
+    margin-top:4px;
+
+  }
+.form-control{
+    border-color:#ccc;
+  }
+.form-select{
+    border-color:#ccc;
+  }
+
+  /* #id_form_proyecto-descripcion{
+    margin:4px;
+  } */
 /* Add a black background color to the top navigation */
 .topnav {
   background-color: #333;

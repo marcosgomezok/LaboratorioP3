@@ -3,11 +3,12 @@
 {% block child %}
 <div class="container">
     <div class="container-fluid">
-        <div class="centrar mb-3 mt-3 "><h3>Agrega miembros a un Tribunal</h3></div>
+        <div class="centrar mb-3 mt-3 "><h3>Agregar miembros a un Tribunal.</h3></div>
         <form method="POST">
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Docente:</label>
-              <div class="col-sm-2">
+            <div class="col-sm-3"></div>
+            <label class="col-sm-2 col-form-label">Docente:</label>
+              <div class="col-sm-4">
                   <select class="form-select"type="text" id="docente-id" name="docente-id"/>
                   {% for docente in docentes %}
                   <option value={{docente.id}}>{{docente.nombre}} {{docente.apellido}}</option>
@@ -16,8 +17,9 @@
                 </div>
           </div>
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Rol:</label>
-              <div class="col-sm-10 mt-2">
+            <div class="col-sm-3"></div>
+            <label class="col-sm-2 col-form-label">Rol:</label>
+              <div class="col-sm-2 mt-2">
 
                 <input type="radio" id="id_form_docente-rol1" name="form_docente-rol" value="titular" required checked/>
                 <label for="contactChoice1">Titular</label>
@@ -29,8 +31,9 @@
               </div>
           </div>
           <div class="form-group row">
-            <label class="col-sm-1 col-form-label">Tribunal:</label>
-              <div class="col-sm-2">
+            <div class="col-sm-3"></div>
+            <label class="col-sm-2 col-form-label">Tribunal:</label>
+              <div class="col-sm-4">
                   <select class="form-select"type="text" id="tribunal-id" name="tribunal-id"/>
                   {% for tribunal in tribunales %}
                     <option value={{tribunal.id}}>Tribunal {{tribunal.id}}</option>
@@ -41,10 +44,11 @@
           <div class="centrar margin2">
             <button type="submit" class="btn btn-success" name="agregar-miembro">Guardar</button>
           </div>      
-          <div class="centrar mb-3 mt-3 "><h3>Crear un Tribunal</h3></div>
+          <div class="centrar mb-3 mt-3 "><h3>Crear un Tribunal.</h3></div>
 
                 <div class="form-group row">
-                  <label class="col-sm-1 col-form-label">Director:</label>
+                  <div class="col-sm-3"></div>
+                  <label class="col-sm-2 col-form-label">Presidente:</label>
                     <div class="col-sm-3">
                         <select class="form-select"type="text" id="director-id" name="director-id"/>
                         {% for docente in docentes %}
@@ -54,7 +58,7 @@
                       </div>
                       <div class="col-sm-4">
         
-                        <button type="submit" class="btn btn-success" name="agregar-tribunal">Agregar un Nuevo Tribunal</button>
+                        <button type="submit" class="btn btn-primary" name="agregar-tribunal">Agregar nuevo Tribunal</button>
                       </div>
                 </div>
                                  

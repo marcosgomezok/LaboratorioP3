@@ -48,30 +48,12 @@
         </div>
       </div>
     <div class="dropdown">
-        <button class="dropbtn">Dictamenes
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Alta</a>
-          <a href="#">Listado</a>
-        </div>
-      </div>
-    <div class="dropdown">
-        <button class="dropbtn">Archivos
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Alta</a>
-          <a href="#">Listado</a>
-        </div>
-      </div>
-    <div class="dropdown">
         <button class="dropbtn">Integrantes
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'gestion:administrador_integrante_alumno' %}">Alumno: Alta</a>
-          <a href="#">Director: Alta</a>
+          <a href="{% url 'gestion:administrador_integrante_alumno' %}">Alumno: Agregar</a>
+          <a href="{% url 'gestion:director_cambio' %}">Director: Cambio</a>
         </div>
       </div>
       <a href="{% url 'gestion:administrador_estadisticas' %}">Estadisticas</a>

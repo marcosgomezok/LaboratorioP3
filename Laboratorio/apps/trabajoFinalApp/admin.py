@@ -38,3 +38,6 @@ class DictamenAdmin(admin.ModelAdmin):
 @admin.register(Cstf)
 class CstfAdmin(admin.ModelAdmin):
     list_display = ("id","fecha_creacion")
+@admin.register(RegistroDirector)
+class RegistroDirectorAdmin(admin.ModelAdmin):
+    list_display = ("id","alta_proyecto")
