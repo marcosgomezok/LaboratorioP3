@@ -16,26 +16,20 @@
                                             <th>Fecha de movimiento</th>
                                             <th>Plazo</th>
                                             <th>Estado</th>
-                                            <th>Observación</th>
+                                            <th>Archivos TF</th>
                                             <th>Informe</th>
                                         </tr>
                                         {% for dictamen in dictamenes %}
                                         <tr>
                                             <td><div><label id="title{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.titulo}}</label> </div></td>
                                             <td><div><label id="description{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.descripcion}}</label> </div></td>
-                                            <td><div><label id="fp{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.presentacion_ptf}}</label> </div></td>
+                                            <td><div><label id="fp{{dictamen.id}}">{{dictamen.dictamen_mov.movimiento_proyecto.presentacion_ptf|date:'d-m-Y'}}</label> </div></td>
                                             <td><div> <label id="mov{{dictamen.id}}">{{dictamen.dictamen_mov.id}}</label></div></td>
-                                            <td><div> <label id="datemov{{dictamen.id}}">{{dictamen.dictamen_mov.fecha_mov}}</label></div></td>
-                                            <td><div> <label id="finmov{{dictamen.id}}">{{dictamen.dictamen_mov.fin_mov}}</label></div></td>
-                                            <td><div> 
-                                                {% if dictamen.resultado_dictamen is null or blank %}
-                                                <label id="estado{{dictamen.id}}">Pendiente</label>
-                                            {% else %}
-                                            <label id="estado{{dictamen.id}}">{{dictamen.get_resultado_dictamen_display}}</label>
-                                            {% endif %}
-                                        </div></td>
-                                        <td><div> <label id="estado{{dictamen.id}}">{{dictamen.observacion}}</label></div></td>
-                                            <td><div><a  href="#" download="archivo.html">Descargar</a></div></td>
+                                            <td><div> <label id="datemov{{dictamen.id}}">{{dictamen.dictamen_mov.fecha_mov|date:'d-m-Y'}}</label></div></td>
+                                            <td><div> <label id="finmov{{dictamen.id}}">{{dictamen.dictamen_mov.fin_mov|date:'d-m-Y'}}</label></div></td>
+                                            <td><div> <label id="estado{{dictamen.id}}">Pendiente</label></td>
+                                              <td><div><a  href="#" download="archivo.html">Descargar</a></div></td>
+                                              <td><div><a  href="#" download="archivo.html">Descargar</a></div></td>
                                         </tr>  
                                         {% endfor %}
                                         
