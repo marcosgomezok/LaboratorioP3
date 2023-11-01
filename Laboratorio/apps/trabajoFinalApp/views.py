@@ -252,8 +252,8 @@ def proyecto_create(request):
 def administrador_proyecto_alta(request):
 
     alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
-    tribunales = Tribunal.objects.all()
-    comisiones = Cstf.objects.all()
+    tribunales = Tribunal.objects.all().order_by('id')
+    comisiones = Cstf.objects.all().order_by('id')
     docentes = Docente.objects.all()
     asesores = Asesor.objects.all()
 
