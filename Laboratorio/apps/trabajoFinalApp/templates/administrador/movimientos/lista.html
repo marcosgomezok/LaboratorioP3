@@ -1,6 +1,6 @@
 {% extends "base/admin.html" %}
 {% block titulo %}Proyectos_Movimientos{% endblock %}
-{% block contenido %}
+{% block child %}
     {% if messages %}
         {% for message in messages %}
             {% if message.tags == 'success' %}  <div class="message" role="status">{{ message }}</div>{% endif %}
@@ -22,7 +22,7 @@
         {% for proyecto in proyectos %}
             <tr>
                 <td>{{ proyecto.id }}</td>
-                <td><a href="{% url 'gestion:movimiento_detalle' proyecto.id %}">{{ proyecto.titulo }}</a></td>
+                <td><a href="{% url 'gestion:movimiento_detalle' %}">{{ proyecto.titulo }}</a></td>
                 <td>{{ proyecto.descripcion }}</td>
             </tr>
         {% endfor %}

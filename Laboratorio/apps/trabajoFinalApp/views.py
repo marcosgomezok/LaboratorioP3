@@ -19,7 +19,6 @@ def movimiento_lista(request):
         return HttpResponseRedirect(reverse("usuarios:index"))
     proyectos = Proyecto.objects.all()
 
-    #movimiento = User.object.get(id=1)
     if 'consulta' in request.GET:
         proyectos = proyectos.filter(nombre__icontains=request.GET['consulta'])
 
@@ -31,10 +30,10 @@ def movimiento_detalle(request, pk):
         return HttpResponseRedirect(reverse("usuarios:index"))
     #proyectos = get_object_or_404(Proyecto, pk=pk)
     #proyectos = Proyecto.objects.select_related('movimiento_proyecto').all()
-
-    proyectos = Proyecto.objects.select_related(
-        'movimiento_proyecto__dictamen_mov','movimiento_proyecto__archivo_mov'
-    ).get(id=pk)
+    proyectos = Proyecto.objects.all()
+    # proyectos = Proyecto.objects.select_related(
+    #     'movimiento_proyecto__dictamen_mov','movimiento_proyecto__archivo_mov'
+    # ).get(id=pk)
     return render(request, 'administrador/movimientos/detalle.html',
                   {'proyectos': proyectos})
 
@@ -67,13 +66,14 @@ def tribunal_proyecto_lista(request):
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
 
-    proyectos = Proyecto.objects.select_related(
-        'movimiento_proyecto__dictamen_mov'
-    ).filter(
-        Q(movimiento_proyecto__dictamen_mov__resultado_dictamen__icontains=resultado_dictamen),
-        Q(presentacion_ptf__gte=fecha_inicio),
-        Q(presentacion_ptf__lte=fecha_fin)
-    ).all()
+    proyectos = Proyecto.objects.all()
+    # proyectos = Proyecto.objects.select_related(
+    #     'movimiento_proyecto__dictamen_mov'
+    # ).filter(
+    #     Q(movimiento_proyecto__dictamen_mov__resultado_dictamen__icontains=resultado_dictamen),
+    #     Q(presentacion_ptf__gte=fecha_inicio),
+    #     Q(presentacion_ptf__lte=fecha_fin)
+    # ).all()
 
     return render(request, 'administrador/estadisticas/tribunal_ptf.html', {
         'proyectos': proyectos,
@@ -734,7 +734,7 @@ def tribunal_nuevo(request):
                                 titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
                                 suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
                                 return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
-                    miembro.save()
+                        miembro.save()
                     group = Group.objects.get(name='Tribunal')
                     docente.user.groups.add(group)
                     messages.success(request, 'Éxito, miembro del Tribunal agregado correctamente')
