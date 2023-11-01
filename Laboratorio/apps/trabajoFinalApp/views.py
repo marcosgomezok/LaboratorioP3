@@ -843,13 +843,13 @@ def administrador_alumno_alta(request):
         form_alumno = AlumnoForm(request.POST, prefix='form_alumno')
         form_user = UserForm(request.POST, prefix='form_user')
 
-        if form_alumno.is_valid():
+        if form_alumno.is_valid() and form_user.is_valid():
             temp_user = form_user.save(commit=False)
-            alumno = form_alumno.save(commit=False)
             user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
             user.save()
             group = Group.objects.get(name='Alumno')
             user.groups.add(group)
+            alumno = form_alumno.save(commit=False)
             alumno.user = user
             alumno.save()
             integrante = Integrante()
@@ -858,6 +858,9 @@ def administrador_alumno_alta(request):
 
             form_alumno = AlumnoForm()
             form_user = UserForm()
+            messages.success(request, 'Éxito, Alumno creado correctamente')
+        else:
+            messages.error(request, 'Error, datos incorrectos')
 
     else:
         form_alumno = AlumnoForm( prefix='form_alumno')
@@ -874,18 +877,19 @@ def administrador_docente_alta(request):
         form_docente = DocenteForm(request.POST, prefix='form_docente')
         form_user = UserForm(request.POST, prefix='form_user')
 
-        if form_docente.is_valid():
+        if form_docente.is_valid() and form_user.is_valid():
             temp_user = form_user.save(commit=False)
-            docente = form_docente.save(commit=False)
             user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
             user.save()
-
+            docente = form_docente.save(commit=False)
             docente.user = user
             docente.save()
+
             form_docente = DocenteForm()
             form_user = UserForm()
-
-
+            messages.success(request, 'Éxito, Docente creado correctamente')
+        else:
+            messages.error(request, 'Error, datos incorrectos')
     else:
         form_docente = DocenteForm( prefix='form_docente')
         form_user = UserForm( prefix='form_user')
@@ -901,17 +905,19 @@ def administrador_asesor_alta(request):
         form_asesor = AsesorForm(request.POST, prefix='form_asesor')
         form_user = UserForm(request.POST, prefix='form_user')
 
-        if form_asesor.is_valid():
-
+        if form_asesor.is_valid() and form_user.is_valid():
             temp_user = form_user.save(commit=False)
-            asesor = form_asesor.save(commit=False)
             user = User.objects.create_user(temp_user.username, temp_user.email, temp_user.password)
             user.save()
-
+            asesor = form_asesor.save(commit=False)
             asesor.user = user
             asesor.save()
+            
             form_asesor = AsesorForm()
             form_user = UserForm()
+            messages.success(request, 'Éxito, Asesor creado correctamente')
+        else:
+            messages.error(request, 'Error, datos incorrectos')
     else:
         form_asesor = AsesorForm( prefix='form_asesor')
         form_user = UserForm( prefix='form_user')
