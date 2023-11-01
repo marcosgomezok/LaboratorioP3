@@ -576,6 +576,7 @@ def tribunal_nuevo(request):
                     tribunal.save() 
                     tribunal.nro_disposicion=tribunal.id
                     tribunal.save() 
+                    messages.success(request, "Éxito, Tribunal creado")
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
                 print(request.POST.get("tribunal-id"))
                 pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first() #verifica si pte esta disponible
@@ -587,22 +588,35 @@ def tribunal_nuevo(request):
                     if(request.POST.get("form_docente-rol")=='presidente'):
                         selected.presidente = docente
                         selected.save()
-                    if(request.POST.get("form_docente-rol")=='titular'):
-                        miembro = Miembro_Titular()
-                        miembro.tribunal_mt = selected
-                        miembro.vocal_titular = docente
                     else:
-                        miembro = Miembro_Suplente()
-                        miembro.tribunal_ms = selected
-                        miembro.vocal_suplente = docente
+                        if(request.POST.get("form_docente-rol")=='titular'):
+                            miembro = Miembro_Titular()
+                            miembro.tribunal_mt = selected
+                            miembro.vocal_titular = docente
+                        else:
+                            if(request.POST.get("form_docente-rol")=='suplente'):
+                                miembro = Miembro_Suplente()
+                                miembro.tribunal_ms = selected
+                                miembro.vocal_suplente = docente
+                            else:
+                                messages.error(request, 'Error, el Tribunal completo y no se pueden agregar mas miembros')
+                                pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first() #verifica si pte esta disponible
+                                titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
+                                suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
+                                return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
                     miembro.save()
                     group = Group.objects.get(name='Tribunal')
                     docente.user.groups.add(group)
+                    messages.success(request, 'Éxito, miembro del Tribunal agregado correctamente')
+                    pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first() #verifica si pte esta disponible
+                    titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
+                    suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
                 return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})    
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
         except Docente.DoesNotExist:
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
         except Tribunal.DoesNotExist:
+            messages.error(request, 'Error, No hay Tribunal seleccionado')
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
 
 def movimientos(request):

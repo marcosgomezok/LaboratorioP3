@@ -147,6 +147,11 @@ table {
     margin-top:0px;
     color:red;
   }
+  .success{
+    margin:4px;
+    margin-top:0px;
+    color:#04a129;
+  }
 
   /* #id_form_proyecto-descripcion{
     margin:4px;
