@@ -66,7 +66,7 @@ def tribunal_proyecto_lista(request):
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
 
-    proyectos = Proyecto.objects.all()
+    proyectos = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto__tribunal_proyecto')
     # proyectos = Proyecto.objects.select_related(
     #     'movimiento_proyecto__dictamen_mov'
     # ).filter(

@@ -9,21 +9,6 @@
         <div class="encabezado">
 
             <div class="centrar mb-3"><h3>Listado de PTF.</h3></div>
-            <!--<form method="post" action="{% url 'gestion:proyecto_lista' %}">
-                <div>
-                    <label id="fecha_desde_cf">Fecha inicio</label>
-                    <input type="date" id="fecha_desde" name="fecha_desde" required>
-                    <label id="fecha_hasta_cf">Fecha fin</label>
-                    <input type="date" id="fecha_hasta" name="fecha_hasta" required>
-                    <button type="submit" class="btn btn-success">Buscar</button>
-                </div>
-            </form>
-            <form action="" method="get">
-                <div>
-                    <input type="text" placeholder="Ingrese Estado de proyecto" name="consulta">
-                    <button type="submit" class="btn btn-success">Buscar</button>
-                </div>
-            </form>-->
             <form method="get" action="">
                 <label for="resultado_dictamen">Ingrese Estado del proyecto</label>
                 <input type="text" name="resultado_dictamen" id="resultado_dictamen">
@@ -57,15 +42,11 @@
                                         <td>{{ proyecto.descripcion }}</td>
                                         <td>{{ proyecto.presentacion_ptf }}</td>
                                         <td>
-                                            {% if proyecto.nota_aceptacion_director %}
-                                                <a href="{{ proyecto.nota_aceptacion_director.url }}" download>Descargar Adjunto</a>
-                                            {% else %}
-                                                No hay archivo adjunto
-                                            {% endif %}
+                                            <a  href="#" download="archivo.html">Descargar</a>
                                         </td>
-                                        <td>{{ proyecto.director }}</td>
-                                        <td>{{ proyecto.co_director }}</td>
-                                        <td>{{ proyecto.asesor }}</td>
+                                        <td>{{ proyecto.director.apellido }} {{ proyecto.director.nombre }}</td>
+                                        <td>{{ proyecto.co_director.apellido }} {{ proyecto.co_director.nombre }}</td>
+                                        <td>{{ proyecto.asesor.apellido }} {{ proyecto.asesor.apellido }}</td>
                                         <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
                                         <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
                                     </tr>

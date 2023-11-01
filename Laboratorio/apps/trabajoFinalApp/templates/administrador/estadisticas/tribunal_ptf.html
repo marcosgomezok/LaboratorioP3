@@ -58,13 +58,13 @@
                             </tr>
                             {% for proyecto in proyectos %}
                                 <tr>
-                                    <td>{{ proyecto.tribunal_proyecto.nro_disposicion }}</td>
-                                    <td>{{ proyecto.tribunal_proyecto.disposicion }}</td>
-                                    <td>{{ proyecto.tribunal_proyecto.presidente }}</td>
-                                    <td>{{ proyecto.id }}</td>
-                                    <td>{{ proyecto.titulo }}</td>
-                                    <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
-                                    <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
+                                    <td>{{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.nro_disposicion }}</td>
+                                    <td>{{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.disposicion }}</td>
+                                    <td>{{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.presidente.apellido }} {{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.presidente.nombre }}</td>
+                                    <td>{{ proyecto.dictamen_mov.movimiento_proyecto.id }}</td>
+                                    <td>{{ proyecto.dictamen_mov.movimiento_proyecto.titulo }}</td>
+                                    <td>{{ proyecto.dictamen_mov.tipo_mov }}</td>
+                                    <td>{{ proyecto.resultado_dictamen }}</td>
                                 </tr>
                             {% endfor %}
                         </table>
