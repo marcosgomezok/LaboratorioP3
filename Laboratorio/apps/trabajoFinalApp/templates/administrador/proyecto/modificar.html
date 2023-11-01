@@ -31,14 +31,14 @@
               <div class="col-sm-3"></div>
               <label class="col-sm-2 col-form-label">Título:</label>
                 <div class="col-sm-4">
-                    <input class="form-control" name="form_proyecto-titulo"  id="form_proyecto-titulo" value="{{editar.titulo}}"/>
+                    <input class="form-control" name="form_proyecto-titulo"  id="form_proyecto-titulo" value="{{editar.titulo}}" required/>
                 </div>
             </div>
             <div class="form-group row">
               <div class="col-sm-3"></div>
               <label class="col-sm-2 col-form-label">Descripción:</label>
                 <div class="col-sm-4"> 
-                    <textarea class="form-control" name="form_proyecto-descripcion"  id="form_proyecto-descripcion" rows="1">{{editar.descripcion}}</textarea>
+                    <textarea class="form-control" name="form_proyecto-descripcion"  id="form_proyecto-descripcion" rows="1" required>{{editar.descripcion}}</textarea>
                 </div>
             </div>
             <div class="form-group row">
@@ -52,7 +52,7 @@
               <div class="col-sm-3"></div>
               <label class="col-sm-2 col-form-label">Tribunal:</label>
                 <div class="col-sm-4">
-                    <select class="form-select"type="text" id="tribunal-id" name="tribunal-id"/>
+                    <select class="form-select"type="text" id="tribunal-id" name="tribunal-id" required/>
                     {% for tribunal in tribunales %}
                         {% if tribunal.id == editar.tribunal_proyecto_id %}
                         <option value={{tribunal.id}} selected>Tribunal {{tribunal.id}}</option>
@@ -69,7 +69,7 @@
               <div class="col-sm-3"></div>
               <label class="col-sm-2 col-form-label">Comisión:</label>
                 <div class="col-sm-4">
-                    <select class="form-select"type="text" id="comision-id" name="comision-id"/>
+                    <select class="form-select"type="text" id="comision-id" name="comision-id" required/>
                     {% for comision in comisiones %}
 
                         {% if comision.id == editar.cstf_proyecto_id %}
@@ -87,7 +87,7 @@
               <div class="col-sm-3"></div>
               <label class="col-sm-2 col-form-label">Director:</label>
                 <div class="col-sm-4">
-                    <select class="form-select"type="text" id="director-id" name="director-id"/>
+                    <select class="form-select"type="text" id="director-id" name="director-id" required/>
                     {% for docente in docentes %}
                         {% if docente.id == editar.director_id %}
                         <option value={{docente.id}} selected>{{docente.nombre}} {{docente.apellido}}</option>

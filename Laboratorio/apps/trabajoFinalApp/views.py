@@ -318,58 +318,62 @@ def administrador_proyecto_alta(request):
     comisiones = Cstf.objects.all().order_by('id')
     docentes = Docente.objects.all()
     asesores = Asesor.objects.all()
+    try:
+        if request.method == 'POST':
+            form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
+            if form_proyecto.is_valid():
+                        alumno = Alumno.objects.get(id=request.POST.get("alumno-id"))
+                        tribunal = Tribunal.objects.get(id=request.POST.get("tribunal-id"))
+                        comision = Cstf.objects.get(id=request.POST.get("comision-id"))
+                        asesor = Asesor.objects.filter(id=request.POST.get("asesor-id")).first()
+                        director = Docente.objects.get(id=request.POST.get("director-id"))
+                        codirector = Docente.objects.filter(id=request.POST.get("co-director-id")).first()
 
-    if request.method == 'POST':
-        form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
-        if form_proyecto.is_valid():
-                    alumno = Alumno.objects.get(id=request.POST.get("alumno-id"))
-                    tribunal = Tribunal.objects.get(id=request.POST.get("tribunal-id"))
-                    comision = Cstf.objects.get(id=request.POST.get("comision-id"))
-                    asesor = Asesor.objects.get(id=request.POST.get("asesor-id"))
-                    director = Docente.objects.get(id=request.POST.get("director-id"))
-                    codirector = Docente.objects.get(id=request.POST.get("co-director-id"))
+                        proyecto_instance = form_proyecto.save()
+                        proyecto_instance.cstf_proyecto = comision
+                        proyecto_instance.tribunal_proyecto = tribunal
+                        proyecto_instance.director = director
+                        proyecto_instance.co_director = codirector
+                        proyecto_instance.asesor = asesor
+                        proyecto_instance.save()
 
-                    proyecto_instance = form_proyecto.save()
-                    proyecto_instance.cstf_proyecto = comision
-                    proyecto_instance.tribunal_proyecto = tribunal
-                    proyecto_instance.director = director
-                    proyecto_instance.co_director = codirector
-                    proyecto_instance.asesor = asesor
-                    proyecto_instance.save()
+                        dictamen = Dictamen()
+                        movimiento = Movimiento()
+                        movimiento.tipo_mov = 'proyecto_presentado'
+                        movimiento.fecha_mov =datetime.now()
+                        movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
+                        movimiento.movimiento_proyecto=proyecto_instance
+                        movimiento.save()
+                        dictamen.dictamen_mov=movimiento
+                        dictamen.save()
 
-                    dictamen = Dictamen()
-                    movimiento = Movimiento()
-                    movimiento.tipo_mov = 'proyecto_presentado'
-                    movimiento.fecha_mov =datetime.now()
-                    movimiento.fin_mov =datetime.now().replace(year=datetime.now().year + 1)
-                    movimiento.movimiento_proyecto=proyecto_instance
-                    movimiento.save()
-                    dictamen.dictamen_mov=movimiento
-                    dictamen.save()
+                        new=RegistroDirector()
+                        new.proyecto=proyecto_instance
+                        new.director = director
+                        new.alta_proyecto = datetime.now()
+                        new.save()    
 
-                    new=RegistroDirector()
-                    new.proyecto=proyecto_instance
-                    new.director = director
-                    new.alta_proyecto = datetime.now()
-                    new.save()    
+                        integrante_temp = Integrante.objects.select_related('alumno').filter(alumno__id=alumno.id,alta_proyecto=None).first()
+                        integrante = Integrante.objects.get(id=integrante_temp.id)
 
-                    integrante_temp = Integrante.objects.select_related('alumno').filter(alumno__id=alumno.id,alta_proyecto=None).first()
-                    integrante = Integrante.objects.get(id=integrante_temp.id)
+                        integrante.alta_proyecto =datetime.now()
+                        integrante.alumno = alumno
+                        integrante.proyecto = proyecto_instance
+                        integrante.save()
+                        messages.success(request, 'Se ha agregado exitosamente el proyecto')
+                        return redirect(reverse('gestion:administrador_proyecto_alta'))
+            else:
+                form_proyecto = ProyectoForm(prefix='form_proyecto')
 
-                    integrante.alta_proyecto =datetime.now()
-                    integrante.alumno = alumno
-                    integrante.proyecto = proyecto_instance
-                    integrante.save()
-                    messages.success(request, 'Se ha agregado exitosamente el proyecto')
-                    return redirect(reverse('gestion:administrador_proyecto_alta'))
-        else:
+        else:    
             form_proyecto = ProyectoForm(prefix='form_proyecto')
 
-    else:    
-        form_proyecto = ProyectoForm(prefix='form_proyecto')
-
-    return render(request, "administrador/proyecto/alta.html", 
-                  {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'alumnos':alumnos,'docentes':docentes,'asesores':asesores})
+        return render(request, "administrador/proyecto/alta.html", 
+                    {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'alumnos':alumnos,'docentes':docentes,'asesores':asesores})
+    except Alumno.DoesNotExist:
+            messages.error(request, 'Error, debes agregar un Alumno')
+            return render(request, "administrador/proyecto/alta.html",
+                          {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'alumnos':alumnos,'docentes':docentes,'asesores':asesores})
 
 def administrador_proyecto_modificar(request):
 
