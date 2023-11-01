@@ -4,12 +4,15 @@
 <div class="container">
     <div class="container-fluid">
         <div class="centrar mb-3 mt-3 "><h3>Agregar miembros a un Tribunal.</h3></div>
-        <form method="POST" name="form">
+        <form method="POST">
           <div class="form-group row">
             <div class="col-sm-3"></div>
             <label class="col-sm-2 col-form-label">Tribunal:</label>
               <div class="col-sm-4">
                   <select class="form-select"type="text" id="tribunal-id" name="tribunal-id" onchange="this.form.submit()"/>
+                  {% if selected.id is null or blank %}
+                  <option disabled selected value> -- Selecciona Tribunal -- </option>
+                  {% endif %}
                   {% for tribunal in tribunales %}
                   {% if tribunal.id == selected.id %}
                       <option value={{selected.id}} selected>Tribunal {{tribunal.id}}</option>
@@ -69,18 +72,14 @@
                 
               </div>
 
+
           <div class="centrar margin2">
             <button type="submit" class="btn btn-success" name="agregar-miembro">Guardar</button>
           </div>      
 
-       
+                                 
               {% csrf_token %}
         </form>
         </div>
     </div>
-    <script type="text/javascript">
-      $(document).ready(function(){
-           $('#form').submit();
-      });
-      </script>
 {% endblock child%}   

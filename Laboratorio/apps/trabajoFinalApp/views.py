@@ -567,54 +567,42 @@ def registro_cstf(request):
 def tribunal_nuevo(request):
         try:
             tribunales = Tribunal.objects.all()
-            titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()
-            suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()
-            pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first()
-            selected = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
             
-            print(titulares)
             if request.method=='POST':
                 if 'agregar-tribunal' in request.POST: 
-                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()   
                     tribunal = Tribunal()
                     tribunal.disposicion = datetime.now()
                     tribunal.save() 
                     tribunal.nro_disposicion=tribunal.id
                     tribunal.save() 
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
-            if request.method=='POST':
+                print(request.POST.get("tribunal-id"))
+                pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first() #verifica si pte esta disponible
+                titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
+                suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
+                selected = Tribunal.objects.get(id=request.POST.get("tribunal-id"))#busca al tribunal que es el seleccionado
+                docente = Docente.objects.get(id=request.POST.get("docente-id"))#busca al docente
                 if 'agregar-miembro' in request.POST: 
-                    titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()
-                    suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()
-                    pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first()
-                    selected = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
-                    docente = Docente.objects.get(id=request.POST.get("docente-id"))
-                    tribunal = Tribunal.objects.filter(id=request.POST.get("tribunal-id")).first()
-
                     if(request.POST.get("form_docente-rol")=='presidente'):
-                        docente = Docente.objects.get(id=request.POST.get("docente-id"))
-                        tribunal.presidente = docente
-                        tribunal.save()
+                        selected.presidente = docente
+                        selected.save()
                     if(request.POST.get("form_docente-rol")=='titular'):
                         miembro = Miembro_Titular()
-                        miembro.tribunal_mt = tribunal
+                        miembro.tribunal_mt = selected
                         miembro.vocal_titular = docente
                     else:
                         miembro = Miembro_Suplente()
-                        miembro.tribunal_ms = tribunal
+                        miembro.tribunal_ms = selected
                         miembro.vocal_suplente = docente
                     miembro.save()
                     group = Group.objects.get(name='Tribunal')
                     docente.user.groups.add(group)
-                    print("por entrar en el primer redirect")
-                    return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
-                print("segundo redirect")
                 return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})    
-            print("tercer render")
-            return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
+            return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
         except Docente.DoesNotExist:
-            print("sin docente")
+            return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
+        except Tribunal.DoesNotExist:
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
 
 def movimientos(request):
