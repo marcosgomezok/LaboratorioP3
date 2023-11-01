@@ -91,7 +91,7 @@ def proyecto_lista(request):
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
 def proyecto_integrante(request):
-    if(request.user.groups.filter(name='Alumno') is False):
+    if(request.user.groups.filter(name='Alumno').first() is None):
         return HttpResponseRedirect(reverse("usuarios:index"))
     #obtengo el proyecto asignado al usuario logeado
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
@@ -122,7 +122,7 @@ def proyecto_integrante(request):
     return render(request, 'alumno/integrante.html')
 
 def proyecto_baja(request):
-    if(request.user.groups.filter(name='Alumno') is False):
+    if(request.user.groups.filter(name='Alumno').first() is None):
         return HttpResponseRedirect(reverse("usuarios:index"))
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
@@ -143,7 +143,7 @@ def proyecto_baja(request):
          return redirect(reverse('gestion:proyecto_create'))
     
 def proyecto_entrega(request):
-    if(request.user.groups.filter(name='Alumno') is False):
+    if(request.user.groups.filter(name='Alumno').first() is None):
         return HttpResponseRedirect(reverse("usuarios:index"))
 
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
@@ -265,7 +265,7 @@ def proyecto_entrega(request):
 
 
 def proyecto_create(request):
-    if(request.user.groups.filter(name='Alumno') is False):
+    if(request.user.groups.filter(name='Alumno').first() is None):
         return HttpResponseRedirect(reverse("usuarios:index"))    
     if request.method == 'POST':
 
@@ -519,20 +519,22 @@ def administrador_integrante_alumno(request):
                   {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
     
 def alumno(request):
-         if(request.user.groups.filter(name='Alumno') is False):
+         if(request.user.groups.filter(name='Alumno').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "alumno/home.html")
 
 def docente(request):
+         if(request.user.groups.first() is not None or request.user.is_superuser is True):
+              return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "docente/home.html")
 
 def cstf(request):
-         if(request.user.groups.filter(name='CSTF') is False):
+         if(request.user.groups.filter(name='CSTF').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "cstf/home.html")
 
 def cstf_evaluacion(request):
-        if(request.user.groups.filter(name='CSTF') is False):
+        if(request.user.groups.filter(name='CSTF').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
         docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
         miembro = Miembro_Cstf.objects.filter(docente=docente.id).first()
@@ -554,12 +556,12 @@ def cstf_evaluacion(request):
         return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes})
 
 def tribunal(request):
-         if(request.user.groups.filter(name='Tribunal') is False):
+         if(request.user.groups.filter(name='Tribunal').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "tribunal/home.html")
 
 def tribunal_evaluacion_ptf(request):
-         if(request.user.groups.filter(name='Tribunal') is False):
+         if(request.user.groups.filter(name='Tribunal').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
@@ -589,7 +591,7 @@ def tribunal_evaluacion_ptf(request):
          return render(request, "tribunal/evaluacionPTF.html",{'dictamenes': dictamenes})
 
 def tribunal_evaluacion_borrador(request):
-         if(request.user.groups.filter(name='Tribunal') is False):
+         if(request.user.groups.filter(name='Tribunal').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
@@ -619,7 +621,7 @@ def tribunal_evaluacion_borrador(request):
          return render(request, "tribunal/evaluacionBTF.html",{'dictamenes': dictamenes})
 
 def tribunal_evaluacion_final(request):
-         if(request.user.groups.filter(name='Tribunal') is False):
+         if(request.user.groups.filter(name='Tribunal').first() is None):
             return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
@@ -694,7 +696,6 @@ def tribunal_nuevo(request):
                     tribunal.save() 
                     messages.success(request, "Éxito, Tribunal creado")
                     return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
-                print(request.POST.get("tribunal-id"))
                 pdte = Tribunal.objects.filter(id=request.POST.get("tribunal-id"),presidente=None).first() #verifica si pte esta disponible
                 titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
                 suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
