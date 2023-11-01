@@ -1,22 +1,40 @@
 {% extends "base/admin.html" %}
-{% block titulo %}Administrador{% endblock %}
+{% block titulo %}Estadisticas_ptf{% endblock %}
 {% block child %}
 <div class="container">
 
     <div class="container-fluid">
 
-                        
+
         <div class="encabezado">
 
             <div class="centrar mb-3"><h3>Listado de PTF.</h3></div>
-            <form method="post" action="#">
+            <!--<form method="post" action="{% url 'gestion:proyecto_lista' %}">
                 <div>
                     <label id="fecha_desde_cf">Fecha inicio</label>
-                    <input value="2023-08-01" type="date" id="fecha_desde" name="fecha_desde" required>
+                    <input type="date" id="fecha_desde" name="fecha_desde" required>
                     <label id="fecha_hasta_cf">Fecha fin</label>
-                    <input value="2023-12-30" type="date" id="fecha_hasta" name="fecha_hasta" required>
+                    <input type="date" id="fecha_hasta" name="fecha_hasta" required>
                     <button type="submit" class="btn btn-success">Buscar</button>
-                </div>        
+                </div>
+            </form>
+            <form action="" method="get">
+                <div>
+                    <input type="text" placeholder="Ingrese Estado de proyecto" name="consulta">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </form>-->
+            <form method="get" action="">
+                <label for="resultado_dictamen">Ingrese Estado del proyecto</label>
+                <input type="text" name="resultado_dictamen" id="resultado_dictamen">
+
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" >
+
+                <label for="fecha_fin">Fecha de Fin:</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" >
+
+                <input type="submit" value="Buscar">
             </form>
         </div>
                     <div class="tabla_nth_child">
@@ -26,23 +44,36 @@
                                 <th>Titulo</th>
                                 <th>Descripción</th>
                                 <th>Fecha de presentación</th>
-                                <th>Archivos adjuntos</th>
-                                <th>Certificado analítico</th>
                                 <th>Nota de aceptación</th>
-                                <th>CV de asesor</th>
+                                <th>Director</th>
+                                <th>Co-director</th>
+                                <th>Asesor</th>
+                                <th>Etapa</th>
                                 <th>Estado</th>
                             </tr>
-
-                            <tr>
-                                <td><div><label id="title2">Investigación en protocolos de comunicación eficientes.</label> </div></td>
-                                <td><div><label id="description2">Desarrollar y mejorar los métodos de intercambio de datos entre dispositivos y sistemas informáticos.</label> </div></td>
-                                <td><div><label id="fp3">03/11/2023</label> </div></td>
-                                <td><div> <a href="#">Descargar</a></div></td>
-                                <td><div> <a href="#">Descargar</a></div></td>
-                                <td><div> <a href="#">Descargar</a></div></td>
-                                <td><div> <a href="#">Descargar</a></div></td>
-                                <td><div><label id="fp4">Pendiente</label></div></td>
-                            </tr>       
+                            {% for proyecto in proyectos %}
+                                    <tr>
+                                        <td>{{ proyecto.titulo }}</td>
+                                        <td>{{ proyecto.descripcion }}</td>
+                                        <td>{{ proyecto.presentacion_ptf }}</td>
+                                        <td>
+                                            {% if proyecto.nota_aceptacion_director %}
+                                                <a href="{{ proyecto.nota_aceptacion_director.url }}" download>Descargar Adjunto</a>
+                                            {% else %}
+                                                No hay archivo adjunto
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ proyecto.director }}</td>
+                                        <td>{{ proyecto.co_director }}</td>
+                                        <td>{{ proyecto.asesor }}</td>
+                                        <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
+                                        <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5">No se encontraron proyectos.</td>
+                                    </tr>
+                            {% endfor %}
                         </table>
                     </fieldset>
             <br>

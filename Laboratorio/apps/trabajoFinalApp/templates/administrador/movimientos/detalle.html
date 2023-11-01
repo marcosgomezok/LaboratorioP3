@@ -1,0 +1,62 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Movimientos{% endblock %}
+{% block contenido %}
+  <h1>Proyecto: {{ proyecto.titulo }}</h1>
+  {% if messages %}
+      {% for message in messages %}
+          {% if message.tags == 'success' %}  <div class="message">{{ message }}</div>{% endif %}
+      {% endfor %}
+  {% endif %}
+  <p><strong>Movimientos</strong></p>
+
+  <br>
+  <table>
+        <tr>
+            <th>Titulo del proyecto</th>
+            <th>descripcion</th>
+            <th>Tipo de Movimiento</th>
+            <th>Fecha de Movimiento</th>
+            <th>Fin del Movimiento</th>
+            <th>Resultado del Dictamen</th>
+            <th>Observacion</th>
+            <th>Informe</th>
+            <th>Archivos Trabajo Final</th>
+        </tr>
+        {% for proyecto in proyectos %}
+            <tr>
+                <td>{{ proyecto.titulo }}</td>
+                <td>{{ proyecto.descripcion }}</td>
+                <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
+                <td>{{ proyecto.movimiento_proyecto.fecha_mov|date:"SHORT_DATE_FORMAT" }}</td>
+                <td>{{ proyecto.movimiento_proyecto.fin_mov|default_if_none:"---" }}</td>
+                <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
+                <td>{{ proyecto.movimiento_proyecto.dictamen_mov.observacion }}</td>
+                <td>
+                    {% if proyecto.movimiento_proyecto.dictamen_mov.informe %}
+                        {{ proyecto.movimiento_proyecto.dictamen_mov.informe }}
+                        <!--<a href="{{ proyecto.programa.movimiento_proyecto.dictamen_mov.informe.url }}" download>Descargar Adjunto</a>-->
+                    {% else %}
+                        No posee
+                    {% endif %}
+                </td>
+                <td>
+                    {% if proyecto.movimiento_proyecto.archivo_mov.archivo_tf %}
+                        {{ proyecto.movimiento_proyecto.archivo_mov.archivo_tf }}
+                        <!--<a href="{{ proyecto.programa.movimiento_proyecto.dictamen_mov.informe.url }}" download>Descargar Adjunto</a>-->
+                    {% else %}
+                        No posee
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No se encontraron proyectos.</td>
+            </tr>
+        {% endfor %}
+  </table>
+
+  <form action="{% url 'gestion:movimiento_lista' %}" method="POST">
+    {% csrf_token %}
+      <input type="submit" value="Volver" name="Volver"  >
+  </form>
+{% endblock %}

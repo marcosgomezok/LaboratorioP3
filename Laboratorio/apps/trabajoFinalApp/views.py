@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.db.models import Q
 
 from apps.trabajoFinalApp.models import Dictamen,Integrante,Proyecto,Movimiento,Cstf,Miembro_Cstf,Tribunal,Miembro_Titular,Miembro_Suplente,RegistroDirector
 from apps.persona.models import Alumno,Docente,Asesor
@@ -9,6 +10,67 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.utils import timezone
+
+def movimiento_lista(request):
+    proyectos = Proyecto.objects.all()
+
+    #movimiento = User.object.get(id=1)
+    if 'consulta' in request.GET:
+        proyectos = proyectos.filter(nombre__icontains=request.GET['consulta'])
+
+    return render(request, 'administrador/movimiento/lista.html',
+                  {'proyectos': proyectos})
+
+def movimiento_detalle(request, pk):
+    #proyectos = get_object_or_404(Proyecto, pk=pk)
+    #proyectos = Proyecto.objects.select_related('movimiento_proyecto').all()
+
+    proyectos = Proyecto.objects.select_related(
+        'movimiento_proyecto__dictamen_mov','movimiento_proyecto__archivo_mov'
+    ).get(id=pk)
+    return render(request, 'administrador/movimiento/detalle.html',
+                  {'proyectos': proyectos})
+
+def proyecto_lista(request):
+    resultado_dictamen = request.GET.get('resultado_dictamen', '')
+    fecha_inicio = request.GET.get('fecha_inicio', '')
+    fecha_fin = request.GET.get('fecha_fin', '')
+
+    proyectos = Proyecto.objects.select_related(
+        'movimiento_proyecto__dictamen_mov'
+    ).filter(
+        Q(movimiento_proyecto__dictamen_mov__resultado_dictamen__icontains=resultado_dictamen),
+        Q(presentacion_ptf__gte=fecha_inicio),
+        Q(presentacion_ptf__lte=fecha_fin)
+    ).all()
+
+    return render(request, 'administrador/estadisticas/ptf.html', {
+        'proyectos': proyectos,
+        'resultado_dictamen': resultado_dictamen,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin
+    })
+
+def tribunal_proyecto_lista(request):
+    resultado_dictamen = request.GET.get('resultado_dictamen', '')
+    fecha_inicio = request.GET.get('fecha_inicio', '')
+    fecha_fin = request.GET.get('fecha_fin', '')
+
+    proyectos = Proyecto.objects.select_related(
+        'movimiento_proyecto__dictamen_mov'
+    ).filter(
+        Q(movimiento_proyecto__dictamen_mov__resultado_dictamen__icontains=resultado_dictamen),
+        Q(presentacion_ptf__gte=fecha_inicio),
+        Q(presentacion_ptf__lte=fecha_fin)
+    ).all()
+
+    return render(request, 'administrador/estadisticas/tribunal_ptf.html', {
+        'proyectos': proyectos,
+        'resultado_dictamen': resultado_dictamen,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin
+    })
+
 
 def proyecto_lista(request):
     proyectos = Proyecto.objects.all()
