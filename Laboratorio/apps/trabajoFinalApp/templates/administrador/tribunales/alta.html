@@ -62,19 +62,24 @@
                     <label for="contactChoice1">Presidente</label>
                   {% endif %}
                     {% if titulares < 2 %}
-                    <input type="radio" id="id_form_docente-rol1" name="form_docente-rol" value="titular"required checked/>
-                    <label for="contactChoice1">Titular</label>
+                    <input type="radio" id="id_form_docente-rol2" name="form_docente-rol" value="titular"required checked/>
+                    <label for="contactChoice2">Titular</label>
                   {% endif %}
 
                   {% if suplentes < 2 %}
-                    <input type="radio" id="id_form_docente-rol2" name="form_docente-rol" value="suplente" required checked/>
-                    <label for="contactChoice2">Suplente</label>
+                    <input type="radio" id="id_form_docente-rol3" name="form_docente-rol" value="suplente" required checked/>
+                    <label for="contactChoice3">Suplente</label>
+                    {% endif %}
+
+                  {% if suplentes == 2 and titulares == 2 and pdte is null %}
+
+                    <label class="success col-form-label">Tribunal completo, no se pueden asignar mas roles</label>
                     {% endif %}
 
                   </div>
               </div>
           {% endif %}
-          <div class="form-group row">
+          <div class="form-group row margin3">
             <div class="col-sm-3">
 
             </div>

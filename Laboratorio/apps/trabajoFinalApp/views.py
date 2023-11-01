@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Q
 
@@ -9,7 +9,8 @@ from apps.trabajoFinalApp.forms import ProyectoForm,AlumnoForm,DocenteForm,Aseso
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.utils import timezone
+from django.contrib.messages.storage import default_storage
+
 
 def movimiento_lista(request):
     proyectos = Proyecto.objects.all()
@@ -628,10 +629,11 @@ def registro_cstf(request):
         
 def tribunal_nuevo(request):
         try:
-            tribunales = Tribunal.objects.all()
+            tribunales = Tribunal.objects.all().order_by('id')
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
             
             if request.method=='POST':
+                request._messages = default_storage(request)
                 if 'agregar-tribunal' in request.POST: 
                     tribunal = Tribunal()
                     tribunal.disposicion = datetime.now()
@@ -645,8 +647,8 @@ def tribunal_nuevo(request):
                 titulares = Miembro_Titular.objects.filter(tribunal_mt_id=request.POST.get("tribunal-id")).count()#verifica si titular esta disponible
                 suplentes = Miembro_Suplente.objects.filter(tribunal_ms_id=request.POST.get("tribunal-id")).count()#verifica si suplente esta disponible
                 selected = Tribunal.objects.get(id=request.POST.get("tribunal-id"))#busca al tribunal que es el seleccionado
-                docente = Docente.objects.get(id=request.POST.get("docente-id"))#busca al docente
                 if 'agregar-miembro' in request.POST: 
+                    docente = Docente.objects.get(id=request.POST.get("docente-id"))#busca al docente
                     if(request.POST.get("form_docente-rol")=='presidente'):
                         selected.presidente = docente
                         selected.save()
@@ -676,6 +678,7 @@ def tribunal_nuevo(request):
                 return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})    
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
         except Docente.DoesNotExist:
+            messages.error(request, 'Error, debes agregar un Docente')
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes,'titulares':titulares,'selected':selected,'suplentes':suplentes,'pdte':pdte})
         except Tribunal.DoesNotExist:
             messages.error(request, 'Error, No hay Tribunal seleccionado')
