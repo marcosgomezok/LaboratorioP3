@@ -50,3 +50,7 @@ class Miembro_SuplenteAdmin(admin.ModelAdmin):
 @admin.register(Miembro_Cstf)
 class Miembro_CstfAdmin(admin.ModelAdmin):
     list_display = ("id","docente_id")
+
+@admin.register(Miembro_Titular)
+class Miembro_TitularAdmin(admin.ModelAdmin):
+    list_display = ("id","vocal_titular_id")
