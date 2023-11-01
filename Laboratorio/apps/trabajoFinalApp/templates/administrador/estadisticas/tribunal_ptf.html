@@ -1,0 +1,77 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Estadisticas_tribunal{% endblock %}
+{% block child %}
+<div class="container">
+
+    <div class="container-fluid">
+
+                        
+        <div class="encabezado">
+
+            <div class="centrar mb-3"><h3>Listado de tribunales evaluadores y su PTF asociado</h3></div>
+            <!--<form method="post" action="">
+                <div>
+                    <label id="fecha_desde_cf">Fecha inicio</label>
+                    <input type="date" id="fecha_desde" name="fecha_desde" required>
+                    <label id="fecha_hasta_cf">Fecha fin</label>
+                    <input type="date" id="fecha_hasta" name="fecha_hasta" required>
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                    <br><br>
+                </div>        
+            </form>
+            <form action="" method="get">
+                <div>
+                    <input type="text" placeholder="Ingrese Estado de proyecto" name="consulta">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </form>-->
+            <form method="get">
+                <label for="resultado_dictamen">Ingrese esta del proyecto</label>
+                <input type="text" name="resultado_dictamen" id="resultado_dictamen" value="{{ resultado_dictamen }}">
+
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}">
+
+                <label for="fecha_fin">Fecha de Fin:</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}">
+
+                <input type="submit" class="btn btn-success" value="Buscar">
+            </form>
+        </div>
+                    <div class="tabla_nth_child">
+                    <fieldset>
+                        <table>
+                            <tr>
+                                    <th class="centrar" colspan="3">Tribunal Evaluador</th>
+                                    <th class="centrar" colspan="2">PTF</th>
+                                    <th class="central" colspan="1">Movimiento</th>
+                                    <th class="central" colspan="1">Dictamen</th>
+                            </tr>
+                            <tr>
+                                    <th>Nro. Disposición</th>
+                                    <th>Fecha Disposición</th>
+                                    <th>Presidente</th>
+                                    <th>Id Proyecto</th>
+                                    <th>Titulo Proyecto</th>
+                                    <th>Etapa</th>
+                                    <th>Estado</th>
+                            </tr>
+                            {% for proyecto in proyectos %}
+                                <tr>
+                                    <td>{{ proyecto.tribunal_proyecto.nro_disposicion }}</td>
+                                    <td>{{ proyecto.tribunal_proyecto.disposicion }}</td>
+                                    <td>{{ proyecto.tribunal_proyecto.presidente }}</td>
+                                    <td>{{ proyecto.id }}</td>
+                                    <td>{{ proyecto.titulo }}</td>
+                                    <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
+                                    <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </fieldset>
+            <br>
+            </div>
+         
+    </div>
+</div>
+{% endblock %}   

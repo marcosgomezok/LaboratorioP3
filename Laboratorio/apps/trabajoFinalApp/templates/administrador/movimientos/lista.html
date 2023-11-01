@@ -1,0 +1,30 @@
+{% extends "base/admin.html" %}
+{% block titulo %}Proyectos_Movimientos{% endblock %}
+{% block contenido %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}  <div class="message" role="status">{{ message }}</div>{% endif %}
+            {% if message.tags == 'error' %}  <div class="errors" role="alert">{{ message }}</div>{% endif %}
+        {% endfor %}
+    {% endif %}
+  <h2>Lista de Proyectos</h2>
+    <form action="" method="get">
+        <input type="text" placeholder="Ingrese nombre de proyecto" name="consulta">
+        <input type="submit" value="Buscar">
+    </form>
+<br>
+    <table>
+        <tr>
+            <th>Id Proyecto</th>
+            <th>Titulo del proyecto</th>
+            <th>descripcion</th>
+        </tr>
+        {% for proyecto in proyectos %}
+            <tr>
+                <td>{{ proyecto.id }}</td>
+                <td><a href="{% url 'gestion:movimiento_detalle' proyecto.id %}">{{ proyecto.titulo }}</a></td>
+                <td>{{ proyecto.descripcion }}</td>
+            </tr>
+        {% endfor %}
+   </table>
+{% endblock %}
