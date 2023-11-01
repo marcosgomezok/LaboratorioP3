@@ -44,7 +44,6 @@
         </button>
         <div class="dropdown-content">
           <a href="{% url 'gestion:movimientos' %}">Alta</a>
-          <a href="{% url 'gestion:movimiento_lista' %}">Listado</a>
         </div>
       </div>
     <div class="dropdown">
@@ -56,7 +55,18 @@
           <a href="{% url 'gestion:director_cambio' %}">Director: Cambio</a>
         </div>
       </div>
-      <a href="{% url 'gestion:administrador_estadisticas' %}">Estadisticas</a>
+
+    <div class="dropdown">
+        <button class="dropbtn">Estadisticas
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'gestion:movimiento_lista' %}">Movimientos</a>
+          <a href="{% url 'gestion:proyecto_lista' %}">Proyectos</a>
+          <a href="{% url 'gestion:tribunal_proyecto_lista' %}">Tribunales</a>
+        </div>
+      </div>
+
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
 
       <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>

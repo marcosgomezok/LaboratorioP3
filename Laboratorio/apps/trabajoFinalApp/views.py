@@ -462,7 +462,7 @@ def director_cambio(request):
     if(request.user.is_superuser is False):
         return HttpResponseRedirect(reverse("usuarios:index"))
 
-    proyectos = Proyecto.objects.all()
+    proyectos = Proyecto.objects.all().order_by('id')
     docentes = Docente.objects.all()
     editar = None
 
@@ -500,7 +500,7 @@ def administrador_integrante_alumno(request):
         return HttpResponseRedirect(reverse("usuarios:index"))
     editar = None
     alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
-    proyectos = Proyecto.objects.all()
+    proyectos = Proyecto.objects.all().order_by('id')
 
     if request.method == 'POST':
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
@@ -751,7 +751,7 @@ def movimientos(request):
         return HttpResponseRedirect(reverse("usuarios:index"))
              
     editar = None
-    proyectos = Proyecto.objects.all()
+    proyectos = Proyecto.objects.all().order_by('id')
 
     if request.method == 'POST':
         editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id")).first()
