@@ -10,9 +10,13 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.contrib.messages.storage import default_storage
+from apps.usuario import views
+from django.http import HttpResponseRedirect
 
 
 def movimiento_lista(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     proyectos = Proyecto.objects.all()
 
     #movimiento = User.object.get(id=1)
@@ -23,6 +27,8 @@ def movimiento_lista(request):
                   {'proyectos': proyectos})
 
 def movimiento_detalle(request, pk):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     #proyectos = get_object_or_404(Proyecto, pk=pk)
     #proyectos = Proyecto.objects.select_related('movimiento_proyecto').all()
 
@@ -33,6 +39,8 @@ def movimiento_detalle(request, pk):
                   {'proyectos': proyectos})
 
 def proyecto_lista(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     resultado_dictamen = request.GET.get('resultado_dictamen', '')
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
@@ -53,6 +61,8 @@ def proyecto_lista(request):
     })
 
 def tribunal_proyecto_lista(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     resultado_dictamen = request.GET.get('resultado_dictamen', '')
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
@@ -74,10 +84,15 @@ def tribunal_proyecto_lista(request):
 
 
 def proyecto_lista(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
+
     proyectos = Proyecto.objects.all()
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
 def proyecto_integrante(request):
+    if(request.user.groups.filter(name='Alumno') is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     #obtengo el proyecto asignado al usuario logeado
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
@@ -107,7 +122,8 @@ def proyecto_integrante(request):
     return render(request, 'alumno/integrante.html')
 
 def proyecto_baja(request):
-
+    if(request.user.groups.filter(name='Alumno') is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
     
@@ -127,6 +143,8 @@ def proyecto_baja(request):
          return redirect(reverse('gestion:proyecto_create'))
     
 def proyecto_entrega(request):
+    if(request.user.groups.filter(name='Alumno') is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
 
     alumno = Alumno.objects.select_related('user').filter(user_id=request.user.id).first()
     integrante = Integrante.objects.filter(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False).first()
@@ -247,6 +265,8 @@ def proyecto_entrega(request):
 
 
 def proyecto_create(request):
+    if(request.user.groups.filter(name='Alumno') is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))    
     if request.method == 'POST':
 
         form_proyecto = ProyectoForm(request.POST, prefix='form_proyecto')
@@ -312,7 +332,8 @@ def proyecto_create(request):
    
 
 def administrador_proyecto_alta(request):
-
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
     tribunales = Tribunal.objects.all().order_by('id')
     comisiones = Cstf.objects.all().order_by('id')
@@ -376,6 +397,8 @@ def administrador_proyecto_alta(request):
                           {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'alumnos':alumnos,'docentes':docentes,'asesores':asesores})
 
 def administrador_proyecto_modificar(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
 
     tribunales = Tribunal.objects.all()
     comisiones = Cstf.objects.all()
@@ -431,6 +454,8 @@ def administrador_proyecto_modificar(request):
                   {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos,'editar':editar})
     
 def director_cambio(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
 
     proyectos = Proyecto.objects.all()
     docentes = Docente.objects.all()
@@ -464,7 +489,8 @@ def director_cambio(request):
                   {'proyectos':proyectos,'editar':editar,'docentes':docentes})
 
 def administrador_integrante_alumno(request):
-    
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     editar = None
     alumnos = Integrante.objects.select_related('alumno').filter(alta_proyecto=None)
     proyectos = Proyecto.objects.all()
@@ -493,15 +519,21 @@ def administrador_integrante_alumno(request):
                   {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
     
 def alumno(request):
+         if(request.user.groups.filter(name='Alumno') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "alumno/home.html")
 
 def docente(request):
          return render(request, "docente/home.html")
 
 def cstf(request):
+         if(request.user.groups.filter(name='CSTF') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "cstf/home.html")
 
 def cstf_evaluacion(request):
+        if(request.user.groups.filter(name='CSTF') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
         docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
         miembro = Miembro_Cstf.objects.filter(docente=docente.id).first()
         dictamenes = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__cstf_proyecto=miembro.comision_cstf,dictamen_mov__tipo_mov='evaluacion_cstf',resultado_dictamen=None)
@@ -522,9 +554,13 @@ def cstf_evaluacion(request):
         return render(request, "cstf/evaluacion.html",{'dictamenes': dictamenes})
 
 def tribunal(request):
+         if(request.user.groups.filter(name='Tribunal') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          return render(request, "tribunal/home.html")
 
 def tribunal_evaluacion_ptf(request):
+         if(request.user.groups.filter(name='Tribunal') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
          if(miembro is not None):
@@ -553,6 +589,8 @@ def tribunal_evaluacion_ptf(request):
          return render(request, "tribunal/evaluacionPTF.html",{'dictamenes': dictamenes})
 
 def tribunal_evaluacion_borrador(request):
+         if(request.user.groups.filter(name='Tribunal') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
          if(miembro is not None):
@@ -581,6 +619,8 @@ def tribunal_evaluacion_borrador(request):
          return render(request, "tribunal/evaluacionBTF.html",{'dictamenes': dictamenes})
 
 def tribunal_evaluacion_final(request):
+         if(request.user.groups.filter(name='Tribunal') is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
          docente = Docente.objects.select_related('user').filter(user=request.user.id).first()
          miembro = Miembro_Titular.objects.filter(vocal_titular=docente.id).first()
          if(miembro is not None):
@@ -609,6 +649,8 @@ def tribunal_evaluacion_final(request):
          return render(request, "tribunal/evaluacionFINAL.html",{'dictamenes': dictamenes})
 
 def registro_cstf(request):
+        if(request.user.is_superuser is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
         try:
             comisiones = Cstf.objects.all().order_by('id')
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
@@ -636,6 +678,8 @@ def registro_cstf(request):
             return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
         
 def tribunal_nuevo(request):
+        if(request.user.is_superuser is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
         try:
             tribunales = Tribunal.objects.all().order_by('id')
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
@@ -693,6 +737,8 @@ def tribunal_nuevo(request):
             return render(request, "administrador/tribunales/alta.html",{'tribunales':tribunales,'docentes':docentes})
 
 def movimientos(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
              
     editar = None
     proyectos = Proyecto.objects.all()
@@ -836,12 +882,18 @@ def movimientos(request):
 
 
 def administrador(request):
-         return render(request, "administrador/home.html")
+        if(request.user.is_superuser is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
+        return render(request, "administrador/home.html")
 
 def administrador_estadisticas(request):
-         return render(request, "administrador/estadisticas/estadisticas.html")
+        if(request.user.is_superuser is False):
+            return HttpResponseRedirect(reverse("usuarios:index"))
+        return render(request, "administrador/estadisticas/estadisticas.html")
 
 def administrador_alumno_alta(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     if request.method == 'POST':
 
         form_alumno = AlumnoForm(request.POST, prefix='form_alumno')
@@ -876,6 +928,8 @@ def administrador_alumno_alta(request):
     })
 
 def administrador_docente_alta(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     if request.method == 'POST':
 
         form_docente = DocenteForm(request.POST, prefix='form_docente')
@@ -904,6 +958,8 @@ def administrador_docente_alta(request):
     })
 
 def administrador_asesor_alta(request):
+    if(request.user.is_superuser is False):
+        return HttpResponseRedirect(reverse("usuarios:index"))
     if request.method == 'POST':
 
         form_asesor = AsesorForm(request.POST, prefix='form_asesor')
