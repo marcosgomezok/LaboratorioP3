@@ -2,7 +2,7 @@
 {% block titulo %}Tribunal{% endblock %}
 {% block contenido %}
 <ul class="topnav">
-    <li><a class="active" href="#">Inicio</a></li>
+    <li><a class="active" href="{% url 'gestion:tribunal' %}">Inicio</a></li>
     <li><a href="{% url 'gestion:tribunal_evaluacion_ptf' %}">Evaluación PTF</a></li>
     <li><a href="{% url 'gestion:tribunal_evaluacion_borrador' %}">Evaluación BTF</a></li>
     <li><a href="{% url 'gestion:tribunal_evaluacion_final' %}">Defensa TF</a></li>

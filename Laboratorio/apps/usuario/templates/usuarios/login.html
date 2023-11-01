@@ -23,6 +23,10 @@
                                                     <input id="password" name="password" type="password" maxlength="20" required><br><br>
                                                 </div>
                                         </div>
+                                        {% if msj %}
+                                        <div class="errors" role="alert">{{ msj }}</div>
+                                        {% endif %}
+
                                         <div class="control-group">
                                             <div class="controls">
                                                 <input class="btn btn-success" type="submit" value="Ingresar">
