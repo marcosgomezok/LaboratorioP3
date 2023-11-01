@@ -114,6 +114,7 @@ def proyecto_integrante(request):
                  integrante.proyecto = proyecto
                  integrante.alta_proyecto =datetime.now()
                  integrante.save()
+                 messages.success(request, 'Se ha agregado exitosamente un integrante alumno al proyecto')
             else:
                  messages.error(request, 'Error, Matricula Incorrecta')     
         except Alumno.DoesNotExist:
@@ -129,6 +130,7 @@ def proyecto_baja(request):
     
     if integrante is not None:
         proyecto = Proyecto.objects.filter(id=integrante.proyecto_id).first()
+        dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).last()
         if request.method == 'POST':
             integrante.baja_proyecto=datetime.now()
             integrante.save()
@@ -138,6 +140,7 @@ def proyecto_baja(request):
             return render(request, 'alumno/home.html')
         return render(request, 'alumno/baja.html', {
                      'proyecto': proyecto,
+                     'dictamen':dictamen,
                      })
     else:
          return redirect(reverse('gestion:proyecto_create'))
@@ -321,8 +324,9 @@ def proyecto_create(request):
         alumno = Alumno.objects.select_related('user').get(user_id=request.user.id)
         integrante = Integrante.objects.get(alumno_id=alumno.id,baja_proyecto=None,alta_proyecto__isnull=False)
         proyecto = Proyecto.objects.get(id=integrante.proyecto_id)
+        dictamen = Dictamen.objects.select_related('dictamen_mov__movimiento_proyecto').filter(dictamen_mov__movimiento_proyecto__id=proyecto.id).last()
         return render(request, 'alumno/estado.html', {
-            'proyecto': proyecto,
+            'proyecto': proyecto,'dictamen': dictamen,
              })
     except Integrante.DoesNotExist:
         return render(request, 'alumno/createPTF.html', {
@@ -512,7 +516,7 @@ def administrador_integrante_alumno(request):
                     integrante.proyecto = editar
                     integrante.alta_proyecto =datetime.now()
                     integrante.save()
-                    messages.success(request, 'Se ha agregado exitosamente un alumno al proyecto')
+                    messages.success(request, 'Se ha agregado exitosamente un integrante alumno al proyecto')
                     return render(request, "administrador/integrantes/alumno.html", 
                            {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
 
