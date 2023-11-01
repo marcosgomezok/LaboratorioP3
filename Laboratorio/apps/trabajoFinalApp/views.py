@@ -544,26 +544,30 @@ def tribunal_evaluacion_final(request):
 
 def registro_cstf(request):
         try:
-            comisiones = Cstf.objects.all()
+            comisiones = Cstf.objects.all().order_by('id')
             docentes = Docente.objects.select_related('docente','vocal_suplente','vocal_titular','presidente').filter(docente__docente_id=None,vocal_titular__vocal_titular_id=None,vocal_suplente__vocal_suplente_id=None,presidente__presidente_id=None)
             if request.method=='POST':
                 if 'agregar-comision' in request.POST:    
                     cstf = Cstf(fecha_creacion=datetime.now())
                     cstf.save() 
-                    return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
-            if request.method=='POST':
+                    messages.success(request, "Éxito, Comisión creada")
                 if 'agregar-miembro' in request.POST: 
-                    docente = Docente.objects.filter(id=request.POST.get("docente-id")).first()
-                    comision = Cstf.objects.filter(id=request.POST.get("comision-id")).first()
+                    comision = Cstf.objects.get(id=request.POST.get("comision-id"))
+                    docente = Docente.objects.get(id=request.POST.get("docente-id"))
                     miembro = Miembro_Cstf()
                     miembro.docente = docente
                     miembro.comision_cstf = comision
                     miembro.save()
+                    messages.success(request, 'Éxito, miembro de la Comisión agregado correctamente')
                     group = Group.objects.get(name='CSTF')
                     docente.user.groups.add(group)
             return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
+        except Docente.DoesNotExist:
+            messages.error(request, 'Error, debes agregar un Docente')
+            return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
         except Cstf.DoesNotExist:
-            return render(request, "administrador/CSTFs/regCSTF.html")
+            messages.error(request, 'Error, debes agregar una Comision primero')
+            return render(request, "administrador/CSTFs/regCSTF.html",{'comisiones':comisiones,'docentes':docentes})
         
 def tribunal_nuevo(request):
         try:
