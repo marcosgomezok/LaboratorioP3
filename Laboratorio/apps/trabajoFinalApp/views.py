@@ -19,7 +19,7 @@ def movimiento_lista(request):
     if 'consulta' in request.GET:
         proyectos = proyectos.filter(nombre__icontains=request.GET['consulta'])
 
-    return render(request, 'administrador/movimiento/lista.html',
+    return render(request, 'administrador/movimientos/lista.html',
                   {'proyectos': proyectos})
 
 def movimiento_detalle(request, pk):
@@ -29,7 +29,7 @@ def movimiento_detalle(request, pk):
     proyectos = Proyecto.objects.select_related(
         'movimiento_proyecto__dictamen_mov','movimiento_proyecto__archivo_mov'
     ).get(id=pk)
-    return render(request, 'administrador/movimiento/detalle.html',
+    return render(request, 'administrador/movimientos/detalle.html',
                   {'proyectos': proyectos})
 
 def proyecto_lista(request):
@@ -912,7 +912,7 @@ def administrador_asesor_alta(request):
             asesor = form_asesor.save(commit=False)
             asesor.user = user
             asesor.save()
-            
+
             form_asesor = AsesorForm()
             form_user = UserForm()
             messages.success(request, 'Éxito, Asesor creado correctamente')
