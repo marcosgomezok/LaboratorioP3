@@ -483,7 +483,9 @@ def director_cambio(request):
                 new.proyecto=editar
                 new.save()
                 editar.save()
-            return redirect(reverse('gestion:director_cambio'))
+                messages.success(request, 'Se ha cambiado exitosamente el director del proyecto')
+            return render(request, "administrador/integrantes/director.html", 
+                           {'proyectos':proyectos,'editar':editar,'docentes':docentes})
 
         if 'buscar' in request.POST:
              
@@ -510,7 +512,9 @@ def administrador_integrante_alumno(request):
                     integrante.proyecto = editar
                     integrante.alta_proyecto =datetime.now()
                     integrante.save()
-                    return redirect(reverse('gestion:administrador_integrante_alumno'))
+                    messages.success(request, 'Se ha agregado exitosamente un alumno al proyecto')
+                    return render(request, "administrador/integrantes/alumno.html", 
+                           {'form_proyecto': form_proyecto,'proyectos':proyectos,'editar':editar,'alumnos':alumnos})
 
         if 'buscar' in request.POST:
              
