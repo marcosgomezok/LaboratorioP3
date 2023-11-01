@@ -6,6 +6,17 @@
           <div class="centrar mb-3 mt-3 "><h3>Actualizar un Proyecto de Trabajo Final.</h3></div>
           <form method="POST">
             <div class="form-group row">
+              <div class="col-sm-5"></div>
+              <div class="col-sm-7">
+                  {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}  <div class="errors" role="alert">{{ message }}</div>{% endif %}
+                        {% if message.tags == 'success' %}  <div class="success" role="alert">{{ message }}</div>{% endif %}
+                    {% endfor %}
+                  {% endif %}
+              </div>
+            </div> 
+            <div class="form-group row">
               <div class="col-sm-3"></div>
                 <label class="col-sm-2 col-form-label">Proyecto:</label>
                 <div class="col-sm-4">
@@ -104,6 +115,9 @@
               <label class="col-sm-2 col-form-label">Co-Director:</label>
                 <div class="col-sm-4">
                     <select class="form-select"type="text" id="co-director-id" name="co-director-id"/>
+                    {% if editar.co_director_id is null or blank %}
+                    <option disabled selected value> -- Selecciona Co-Director -- </option>
+                    {% endif %}
                     {% for docente in docentes %}
                         {% if docente.id == editar.co_director_id %}
                         <option value={{docente.id}} selected>{{docente.nombre}} {{docente.apellido}}</option>
@@ -119,6 +133,9 @@
               <label class="col-sm-2 col-form-label">Asesor:</label>
                 <div class="col-sm-4">
                     <select class="form-select"type="text" id="asesor-id" name="asesor-id"/>
+                    {% if editar.asesor_id is null or blank %}
+                    <option disabled selected value> -- Selecciona Asesor -- </option>
+                    {% endif %}
                     {% for asesor in asesores %}
                         {% if asesor.id == editar.asesor_id %}
                         <option value={{asesor.id}} selected>{{asesor.nombre}} {{asesor.apellido}}</option>

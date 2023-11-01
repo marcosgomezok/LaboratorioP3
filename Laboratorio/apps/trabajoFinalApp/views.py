@@ -382,7 +382,10 @@ def administrador_proyecto_alta(request):
                         integrante.proyecto = proyecto_instance
                         integrante.save()
                         messages.success(request, 'Se ha agregado exitosamente el proyecto')
-                        return redirect(reverse('gestion:administrador_proyecto_alta'))
+                        form_proyecto = ProyectoForm()
+                        return render(request, "administrador/proyecto/alta.html", 
+                        {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores})
+
             else:
                 form_proyecto = ProyectoForm(prefix='form_proyecto')
 
@@ -400,11 +403,11 @@ def administrador_proyecto_modificar(request):
     if(request.user.is_superuser is False):
         return HttpResponseRedirect(reverse("usuarios:index"))
 
-    tribunales = Tribunal.objects.all()
-    comisiones = Cstf.objects.all()
+    tribunales = Tribunal.objects.all().order_by('id')
+    comisiones = Cstf.objects.all().order_by('id')
     docentes = Docente.objects.all()
     asesores = Asesor.objects.all()
-    proyectos = Proyecto.objects.all()
+    proyectos = Proyecto.objects.all().order_by('id')
     editar = None
 
     if request.method == 'POST':
@@ -415,9 +418,9 @@ def administrador_proyecto_modificar(request):
                         editar = Proyecto.objects.filter(id=request.POST.get("proyecto-id-2")).first()
                         tribunal = Tribunal.objects.get(id=request.POST.get("tribunal-id"))
                         comision = Cstf.objects.get(id=request.POST.get("comision-id"))
-                        asesor = Asesor.objects.get(id=request.POST.get("asesor-id"))
+                        asesor = Asesor.objects.filter(id=request.POST.get("asesor-id")).first()
                         director = Docente.objects.get(id=request.POST.get("director-id"))
-                        codirector = Docente.objects.get(id=request.POST.get("co-director-id"))
+                        codirector = Docente.objects.filter(id=request.POST.get("co-director-id")).first()
                         editar.cstf_proyecto = comision
                         editar.tribunal_proyecto = tribunal
                         editar.co_director = codirector
@@ -439,7 +442,9 @@ def administrador_proyecto_modificar(request):
                         editar.descripcion= temp.descripcion
                         editar.presentacion_ptf= temp.presentacion_ptf
                         editar.save()
-                        return redirect(reverse('gestion:administrador_proyecto_modificar'))
+                        messages.success(request, 'Se ha modificado exitosamente el proyecto')
+                        return render(request, "administrador/proyecto/modificar.html", 
+                        {'form_proyecto': form_proyecto,'tribunales':tribunales,'comisiones':comisiones ,'docentes':docentes,'asesores':asesores,'proyectos':proyectos})
             else:
                 form_proyecto = ProyectoForm(prefix='form_proyecto')
         if 'buscar' in request.POST:
