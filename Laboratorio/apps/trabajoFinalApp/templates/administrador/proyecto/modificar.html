@@ -25,11 +25,17 @@
                     <input class="form-control"name="proyecto-id-2"  id="proyecto-id-2" value="{{editar.id}}" hidden/>
                     <label class="form-control">#{{editar.id}} {{editar.titulo}} </label>
                     {%else%}
-                    <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
-                    {% for proyecto in proyectos %}
-                    <option value={{proyecto.id}}>#{{proyecto.id}} {{proyecto.titulo}} </option>
-                  {% endfor %}
-                    </select>
+
+                          {% if proyectos %}
+                          <select class="form-select"type="text" id="proyecto-id" name="proyecto-id"/>
+                          {% for proyecto in proyectos %}
+                          <option value={{proyecto.id}}>#{{proyecto.id}} {{proyecto.titulo}} </option>
+                          {% endfor %}
+                          </select>
+                          {% else %}
+                          <label class="errors col-form-label">No hay Proyectos disponibles para modificar</label>
+                          {% endif %}
+
                     {% csrf_token %}
                     {% endif %}
                   </div>
