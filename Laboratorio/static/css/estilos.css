@@ -127,6 +127,10 @@ table {
     margin: 50px;
   }
 
+  .margin3{
+    margin-top: 10px;
+  }
+
   .col-form-label{
     padding-right: 1px;
     padding-left: 0px;
