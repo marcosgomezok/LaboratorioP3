@@ -33,8 +33,7 @@
                                 <th>Director</th>
                                 <th>Co-director</th>
                                 <th>Asesor</th>
-                                <th>Etapa</th>
-                                <th>Estado</th>
+
                             </tr>
                             {% for proyecto in proyectos %}
                                     <tr>
@@ -47,13 +46,9 @@
                                         <td>{{ proyecto.director.apellido }} {{ proyecto.director.nombre }}</td>
                                         <td>{{ proyecto.co_director.apellido }} {{ proyecto.co_director.nombre }}</td>
                                         <td>{{ proyecto.asesor.apellido }} {{ proyecto.asesor.apellido }}</td>
-                                        <td>{{ proyecto.movimiento_proyecto.tipo_mov }}</td>
-                                        <td>{{ proyecto.movimiento_proyecto.dictamen_mov.resultado_dictamen }}</td>
+
                                     </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="5">No se encontraron proyectos.</td>
-                                    </tr>
+
                             {% endfor %}
                         </table>
                     </fieldset>

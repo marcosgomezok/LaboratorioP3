@@ -88,6 +88,7 @@ def proyecto_lista(request):
         return HttpResponseRedirect(reverse("usuarios:index"))
 
     proyectos = Proyecto.objects.all()
+    print(proyectos)
     return render(request,'administrador/estadisticas/ptf.html',{'proyectos': proyectos})
 
 def proyecto_integrante(request):
