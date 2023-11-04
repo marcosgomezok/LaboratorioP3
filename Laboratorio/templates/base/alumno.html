@@ -5,9 +5,6 @@
     <li><a class="active" href="{% url 'gestion:alumno' %}">Inicio</a></li>
     <li><a href="{% url 'gestion:proyecto_create' %}">Proyecto</a></li>
     <li><a href="{% url 'gestion:proyecto_entrega' %}">Entrega</a></li>
-    <li><a href="{% url 'gestion:proyecto_baja' %}">Baja</a></li>
-    <li><a href="{% url 'gestion:proyecto_integrante' %}">Integrantes</a></li>
-    
     <a class="right" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
     <a class="right inactive" href="{% url 'gestion:alumno' %}"><i class="fas fa-user"></i> Alumno: {{ request.user.username }}</a>
 </ul>
