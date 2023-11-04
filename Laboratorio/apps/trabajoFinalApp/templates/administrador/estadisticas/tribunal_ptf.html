@@ -63,7 +63,7 @@
                                     <td>{{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.presidente.apellido }} {{ proyecto.dictamen_mov.movimiento_proyecto.tribunal_proyecto.presidente.nombre }}</td>
                                     <td>{{ proyecto.dictamen_mov.movimiento_proyecto.id }}</td>
                                     <td>{{ proyecto.dictamen_mov.movimiento_proyecto.titulo }}</td>
-                                    <td>{{ proyecto.dictamen_mov.tipo_mov }}</td>
+                                    <td>{{ proyecto.dictamen_mov.get_tipo_mov_display}}</td>
                                     <td>{{ proyecto.resultado_dictamen }}</td>
                                 </tr>
                             {% endfor %}
