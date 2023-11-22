@@ -12,7 +12,7 @@ class Miembro_Cstf(models.Model):
 
 class Tribunal(models.Model):
     disposicion = models.DateField(null=True, blank=True)
-    nro_disposicion = models.CharField(null=True, blank=True)
+    nro_disposicion = models.CharField(max_length=2000,null=True, blank=True)
     archivo_tribunal = models.FileField(null=True)
     presidente = models.OneToOneField(Docente, on_delete=models.SET_NULL,null=True, blank=True,related_name='presidente')
 
